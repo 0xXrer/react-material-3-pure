@@ -1,327 +1,558 @@
 /**
- * Material Design 3 Button Styles
- *
- * Implements M3 "Common Buttons" specification with:
- * - 5 visual variants (filled, outlined, text, elevated, tonal)
- * - State Layer concept using ::before pseudo-element for state visualization
- * - Elevation changes on interaction (filled, elevated, tonal variants)
- * - Hardware-accelerated ripple effect animations
- * - Capsule shape with full border-radius
- * - Label Large typography
- *
- * Reference: https://m3.material.io/components/all-buttons
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-/* ============================================================================
-   BASE BUTTON STYLES
+/**
+ * Material Design 3 Button Styles
+ *
+ * Ported from @material/web button component.
+ * @see https://github.com/material-components/material-web/tree/main/button
+ *
+ * Uses CSS custom properties matching the Material Web token structure.
+ */
+
+/* ==========================================================================
+   HOST (Container) - Equivalent to :host in Web Components
+   ========================================================================== */
+
+.host {
+  /* Shape tokens - using logical properties for RTL support */
+  --_container-shape-start-start: var(--md-filled-button-container-shape-start-start, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));
+  --_container-shape-start-end: var(--md-filled-button-container-shape-start-end, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));
+  --_container-shape-end-start: var(--md-filled-button-container-shape-end-start, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));
+  --_container-shape-end-end: var(--md-filled-button-container-shape-end-end, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));
+
+  /* Container tokens */
+  --_container-height: 40px;
+  --_container-color: var(--md-sys-color-primary, #6750a4);
+
+  /* Label text tokens */
+  --_label-text-color: var(--md-sys-color-on-primary, #fff);
+  --_label-text-font: var(--md-sys-typescale-label-large-font, Roboto, sans-serif);
+  --_label-text-size: var(--md-sys-typescale-label-large-size, 0.875rem);
+  --_label-text-line-height: var(--md-sys-typescale-label-large-line-height, 1.25rem);
+  --_label-text-weight: var(--md-sys-typescale-label-large-weight, 500);
+
+  /* Icon tokens */
+  --_icon-size: 18px;
+  --_icon-color: var(--_label-text-color);
+
+  /* Spacing tokens */
+  --_leading-space: 24px;
+  --_trailing-space: 24px;
+  --_with-leading-icon-leading-space: 16px;
+  --_with-leading-icon-trailing-space: 24px;
+  --_with-trailing-icon-leading-space: 24px;
+  --_with-trailing-icon-trailing-space: 16px;
+
+  /* State layer tokens */
+  --_hover-state-layer-color: var(--md-sys-color-on-primary, #fff);
+  --_hover-state-layer-opacity: 0.08;
+  --_pressed-state-layer-color: var(--md-sys-color-on-primary, #fff);
+  --_pressed-state-layer-opacity: 0.12;
+
+  /* Hover/Focus/Pressed label colors */
+  --_hover-label-text-color: var(--_label-text-color);
+  --_focus-label-text-color: var(--_label-text-color);
+  --_pressed-label-text-color: var(--_label-text-color);
+
+  /* Hover/Focus/Pressed icon colors */
+  --_hover-icon-color: var(--_icon-color);
+  --_focus-icon-color: var(--_icon-color);
+  --_pressed-icon-color: var(--_icon-color);
+
+  /* Disabled tokens */
+  --_disabled-container-color: var(--md-sys-color-on-surface, #1d1b20);
+  --_disabled-container-opacity: 0.12;
+  --_disabled-label-text-color: var(--md-sys-color-on-surface, #1d1b20);
+  --_disabled-label-text-opacity: 0.38;
+  --_disabled-icon-color: var(--md-sys-color-on-surface, #1d1b20);
+  --_disabled-icon-opacity: 0.38;
+
+  /* Outline tokens (for outlined variant) */
+  --_outline-color: var(--md-sys-color-outline, #79747e);
+  --_outline-width: 1px;
+
+  /* Border radius using logical properties */
+  border-start-start-radius: var(--_container-shape-start-start);
+  border-start-end-radius: var(--_container-shape-start-end);
+  border-end-start-radius: var(--_container-shape-end-start);
+  border-end-end-radius: var(--_container-shape-end-end);
+
+  /* Box model */
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  min-height: var(--_container-height);
+  outline: none;
+
+  /* Padding with block padding for wrapped text */
+  padding-block: calc((var(--_container-height) - max(var(--_label-text-line-height), var(--_icon-size))) / 2);
+  padding-inline-start: var(--_leading-space);
+  padding-inline-end: var(--_trailing-space);
+
+  /* Alignment */
+  place-content: center;
+  place-items: center;
+  position: relative;
+
+  /* Typography */
+  font-family: var(--_label-text-font);
+  font-size: var(--_label-text-size);
+  line-height: var(--_label-text-line-height);
+  font-weight: var(--_label-text-weight);
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  vertical-align: top;
+}
+
+.host:is(.disabled, .softDisabled) {
+  cursor: default;
+  pointer-events: none;
+}
+
+.host.hasLeadingIcon {
+  padding-inline-start: var(--_with-leading-icon-leading-space);
+  padding-inline-end: var(--_with-leading-icon-trailing-space);
+}
+
+.host.hasTrailingIcon {
+  padding-inline-start: var(--_with-trailing-icon-leading-space);
+  padding-inline-end: var(--_with-trailing-icon-trailing-space);
+}
+
+/* ==========================================================================
+   BUTTON / LINK ELEMENT
    ========================================================================== */
 
 .button {
-  /* Layout & Sizing */
-  position: relative;
+  border-radius: inherit;
+  cursor: inherit;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  box-sizing: border-box;
-  min-width: 64px;
-  height: 40px;
-  padding: 0 24px;
-
-  /* Appearance */
   border: none;
   outline: none;
-  border-radius: var(--md-sys-shape-corner-full);
-
-  /* Typography: Label Large (M3 specification) */
-  font-family: var(--md-sys-typescale-label-large-font, 'Roboto', sans-serif);
-  font-size: var(--md-sys-typescale-label-large-size, 14px);
-  line-height: var(--md-sys-typescale-label-large-line-height, 20px);
-  font-weight: var(--md-sys-typescale-label-large-weight, 500);
-  letter-spacing: var(--md-sys-typescale-label-large-tracking, 0.1px);
-
-  /* Interaction */
-  cursor: pointer;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-
-  /* Transitions for elevation and background changes */
-  transition:
-    box-shadow var(--md-sys-transition-duration, 200ms) var(--md-sys-transition-easing, cubic-bezier(0.2, 0, 0, 1)),
-    background-color var(--md-sys-transition-duration, 200ms) var(--md-sys-transition-easing, cubic-bezier(0.2, 0, 0, 1));
+  -webkit-appearance: none;
+  appearance: none;
+  vertical-align: middle;
+  background: transparent;
+  text-decoration: none;
+  min-width: calc(64px - var(--_leading-space) - var(--_trailing-space));
+  width: 100%;
+  z-index: 0;
+  height: 100%;
+  font: inherit;
+  color: var(--_label-text-color);
+  padding: 0;
+  gap: inherit;
+  text-transform: inherit;
 }
 
-/**
- * State Layer Implementation (M3 Specification)
- *
- * Instead of changing background-color on hover, M3 uses a semi-transparent
- * overlay with specific opacities:
- * - Hover: 8% opacity
- * - Focus: 12% opacity
- * - Pressed: 12% opacity
- *
- * This is achieved using a ::before pseudo-element that sits behind content.
- */
-.button::before {
-  content: '';
+.button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+.host:hover .button {
+  color: var(--_hover-label-text-color);
+}
+
+.host:focus-within .button {
+  color: var(--_focus-label-text-color);
+}
+
+.host:active .button {
+  color: var(--_pressed-label-text-color);
+}
+
+/* ==========================================================================
+   BACKGROUND
+   ========================================================================== */
+
+.background {
+  background: var(--_container-color);
+  border-radius: inherit;
+  inset: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.host:is(.disabled, .softDisabled) .background {
+  background: var(--_disabled-container-color);
+  opacity: var(--_disabled-container-opacity);
+}
+
+@media (forced-colors: active) {
+  .background {
+    border: 1px solid CanvasText;
+  }
+
+  .host:is(.disabled, .softDisabled) {
+    --_disabled-icon-color: GrayText;
+    --_disabled-icon-opacity: 1;
+    --_disabled-container-opacity: 1;
+    --_disabled-label-text-color: GrayText;
+    --_disabled-label-text-opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   LABEL
+   ========================================================================== */
+
+.label {
+  overflow: hidden;
+  text-overflow: inherit;
+}
+
+.host:is(.disabled, .softDisabled) .label {
+  color: var(--_disabled-label-text-color);
+  opacity: var(--_disabled-label-text-opacity);
+}
+
+/* ==========================================================================
+   ICON SLOT
+   ========================================================================== */
+
+.iconSlot {
+  display: inline-flex;
+  position: relative;
+  writing-mode: horizontal-tb;
+  fill: currentColor;
+  flex-shrink: 0;
+  color: var(--_icon-color);
+  font-size: var(--_icon-size);
+  inline-size: var(--_icon-size);
+  block-size: var(--_icon-size);
+}
+
+.iconSlot > * {
+  width: 100%;
+  height: 100%;
+}
+
+.host:hover .iconSlot {
+  color: var(--_hover-icon-color);
+}
+
+.host:focus-within .iconSlot {
+  color: var(--_focus-icon-color);
+}
+
+.host:active .iconSlot {
+  color: var(--_pressed-icon-color);
+}
+
+.host:is(.disabled, .softDisabled) .iconSlot {
+  color: var(--_disabled-icon-color);
+  opacity: var(--_disabled-icon-opacity);
+}
+
+/* ==========================================================================
+   TOUCH TARGET
+   ========================================================================== */
+
+.touch {
+  position: absolute;
+  top: 50%;
+  height: 48px;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* ==========================================================================
+   FOCUS RING
+   ========================================================================== */
+
+.focusRing {
+  --md-focus-ring-active-width: 8px;
+  --md-focus-ring-color: var(--md-sys-color-secondary, #625b71);
+  --md-focus-ring-duration: 600ms;
+  --md-focus-ring-width: 3px;
+  --md-focus-ring-outward-offset: 2px;
+  
+  animation-delay: 0s, calc(var(--md-focus-ring-duration) * 0.25);
+  animation-duration: calc(var(--md-focus-ring-duration) * 0.25), calc(var(--md-focus-ring-duration) * 0.75);
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  box-sizing: border-box;
+  color: var(--md-focus-ring-color);
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  
+  animation-name: outward-grow, outward-shrink;
+  border-end-end-radius: calc(var(--_container-shape-end-end) + var(--md-focus-ring-outward-offset));
+  border-end-start-radius: calc(var(--_container-shape-end-start) + var(--md-focus-ring-outward-offset));
+  border-start-end-radius: calc(var(--_container-shape-start-end) + var(--md-focus-ring-outward-offset));
+  border-start-start-radius: calc(var(--_container-shape-start-start) + var(--md-focus-ring-outward-offset));
+  inset: calc(-1 * var(--md-focus-ring-outward-offset));
+  outline: var(--md-focus-ring-width) solid currentColor;
+}
+
+.host:has(:focus-visible) .focusRing {
+  display: flex;
+}
+
+@keyframes outward-grow {
+  from {
+    outline-width: 0;
+  }
+  to {
+    outline-width: var(--md-focus-ring-active-width);
+  }
+}
+
+@keyframes outward-shrink {
+  from {
+    outline-width: var(--md-focus-ring-active-width);
+  }
+}
+
+/* ==========================================================================
+   RIPPLE SURFACE
+   ========================================================================== */
+
+.surface {
   position: absolute;
   inset: 0;
-  background-color: currentColor;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
   border-radius: inherit;
-  transition: opacity var(--md-sys-transition-duration, 200ms) ease;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Hover state: Apply state layer opacity */
-.button:hover::before {
-  opacity: var(--md-sys-state-hover-state-layer-opacity, 0.08);
+.surface::before {
+  content: '';
+  opacity: 0;
+  position: absolute;
+  background-color: var(--_hover-state-layer-color);
+  inset: 0;
+  transition: opacity 15ms linear, background-color 15ms linear;
 }
 
-/* Focus-visible state: Apply focus state layer opacity */
-.button:focus-visible::before {
-  opacity: var(--md-sys-state-focus-state-layer-opacity, 0.12);
+.surface::after {
+  content: '';
+  opacity: 0;
+  position: absolute;
+  background: radial-gradient(
+    closest-side,
+    var(--_pressed-state-layer-color) max(calc(100% - 70px), 65%),
+    transparent 100%
+  );
+  transform-origin: center center;
+  transition: opacity 375ms linear;
 }
 
-/* Pressed/Active state: Apply pressed state layer opacity */
-.button:active::before {
-  opacity: var(--md-sys-state-pressed-state-layer-opacity, 0.12);
+.surface.hovered::before {
+  background-color: var(--_hover-state-layer-color);
+  opacity: var(--_hover-state-layer-opacity);
 }
 
-/* Disabled state: Remove interactivity and visual feedback */
-.button:disabled {
-  cursor: not-allowed;
-  box-shadow: none;
+.surface.pressed::after {
+  opacity: var(--_pressed-state-layer-opacity);
+  transition-duration: 105ms;
 }
 
-.button:disabled::before {
+.host:is(.disabled, .softDisabled) .surface {
   display: none;
 }
 
-/* Content wrapper: Ensures text/icons stay above state layer and ripples */
-.content {
-  position: relative;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* Icon styling */
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  fill: currentColor;
-}
-
-/* ============================================================================
-   VARIANT: FILLED (Default)
+/* ==========================================================================
+   ELEVATION
    ========================================================================== */
 
-/**
- * Filled Button (M3 specification)
- * - Background: Primary color
- * - Text: On-primary color
- * - Elevation: 0 at rest, Level 1 on hover, 0 on press
- * - State layer uses on-primary color for contrast
- */
-.filled {
-  background-color: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-}
-
-.filled::before {
-  background-color: var(--md-sys-color-on-primary);
-}
-
-.filled:hover {
-  box-shadow: var(--md-sys-elevation-level-1);
-}
-
-.filled:active {
-  box-shadow: none;
-}
-
-.filled:disabled {
-  background-color: rgba(28, 27, 31, 0.12); /* on-surface at 12% */
-  color: rgba(28, 27, 31, 0.38); /* on-surface at 38% */
-}
-
-/* ============================================================================
-   VARIANT: OUTLINED
-   ========================================================================== */
-
-/**
- * Outlined Button (M3 specification)
- * - Background: Transparent
- * - Border: 1px outline color
- * - Text: Primary color
- * - Elevation: 0
- * - State layer uses primary color
- */
-.outlined {
-  background-color: transparent;
-  color: var(--md-sys-color-primary);
-  border: 1px solid var(--md-sys-color-outline);
-  padding: 0 23px; /* Reduce padding by border width to maintain size */
-}
-
-.outlined::before {
-  background-color: var(--md-sys-color-primary);
-}
-
-.outlined:focus-visible {
-  border-color: var(--md-sys-color-primary);
-}
-
-.outlined:disabled {
-  border-color: rgba(28, 27, 31, 0.12); /* on-surface at 12% */
-  color: rgba(28, 27, 31, 0.38); /* on-surface at 38% */
-}
-
-/* ============================================================================
-   VARIANT: TEXT
-   ========================================================================== */
-
-/**
- * Text Button (M3 specification)
- * - Background: Transparent
- * - Border: None
- * - Text: Primary color
- * - Elevation: 0
- * - State layer uses primary color
- * - Reduced padding for compact appearance
- */
-.text {
-  background-color: transparent;
-  color: var(--md-sys-color-primary);
-  padding: 0 12px;
-  min-width: auto;
-}
-
-.text::before {
-  background-color: var(--md-sys-color-primary);
-}
-
-.text:disabled {
-  color: rgba(28, 27, 31, 0.38); /* on-surface at 38% */
-}
-
-/* ============================================================================
-   VARIANT: ELEVATED
-   ========================================================================== */
-
-/**
- * Elevated Button (M3 specification)
- * - Background: Surface container low
- * - Text: Primary color
- * - Elevation: Level 1 at rest, Level 2 on hover, Level 1 on press
- * - State layer uses primary color
- */
-.elevated {
-  background-color: var(--md-sys-color-surface-container-low);
-  color: var(--md-sys-color-primary);
-  box-shadow: var(--md-sys-elevation-level-1);
-}
-
-.elevated::before {
-  background-color: var(--md-sys-color-primary);
-}
-
-.elevated:hover {
-  box-shadow: var(--md-sys-elevation-level-2);
-}
-
-.elevated:active {
-  box-shadow: var(--md-sys-elevation-level-1);
-}
-
-.elevated:disabled {
-  background-color: rgba(28, 27, 31, 0.12); /* on-surface at 12% */
-  color: rgba(28, 27, 31, 0.38); /* on-surface at 38% */
-  box-shadow: none;
-}
-
-/* ============================================================================
-   VARIANT: TONAL
-   ========================================================================== */
-
-/**
- * Tonal Button (M3 specification)
- * - Background: Secondary container
- * - Text: On-secondary container
- * - Elevation: 0 at rest, Level 1 on hover, 0 on press
- * - State layer uses on-secondary-container color
- */
-.tonal {
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
-}
-
-.tonal::before {
-  background-color: var(--md-sys-color-on-secondary-container);
-}
-
-.tonal:hover {
-  box-shadow: var(--md-sys-elevation-level-1);
-}
-
-.tonal:active {
-  box-shadow: none;
-}
-
-.tonal:disabled {
-  background-color: rgba(28, 27, 31, 0.12); /* on-surface at 12% */
-  color: rgba(28, 27, 31, 0.38); /* on-surface at 38% */
-}
-
-/* ============================================================================
-   RIPPLE EFFECT CONTAINER
-   ========================================================================== */
-
-/**
- * Ripple Effect (M3 specification)
- *
- * Hardware-accelerated ink ripple that:
- * - Originates from click coordinates
- * - Uses currentColor for theme consistency
- * - Animates from scale(0) to scale(1) with opacity fade
- * - Duration: 600ms with linear timing
- */
-.rippleContainer {
+.elevation {
   position: absolute;
   inset: 0;
-  overflow: hidden;
   border-radius: inherit;
-  z-index: 1;
+  z-index: -2;
+  pointer-events: none;
+  transition: box-shadow 280ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.host:is(.disabled, .softDisabled) .elevation {
+  transition: none;
+  box-shadow: none;
+}
+
+/* Elevation shadows */
+.filled .elevation,
+.tonal .elevation {
+  box-shadow: none;
+}
+
+.elevated .elevation {
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+.elevated:hover .elevation {
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+}
+
+.elevated:active .elevation {
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================================
+   OUTLINE (for outlined variant)
+   ========================================================================== */
+
+.outline {
+  inset: 0;
+  border-style: solid;
+  position: absolute;
+  box-sizing: border-box;
+  border-color: var(--_outline-color);
+  border-width: var(--_outline-width);
+  border-start-start-radius: var(--_container-shape-start-start);
+  border-start-end-radius: var(--_container-shape-start-end);
+  border-end-start-radius: var(--_container-shape-end-start);
+  border-end-end-radius: var(--_container-shape-end-end);
+  z-index: -1;
   pointer-events: none;
 }
 
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  background-color: currentColor;
-  opacity: 0.12; /* Pressed state opacity as starting point */
-  transform: scale(0);
-  animation: ripple-anim 600ms linear forwards;
-  will-change: transform, opacity; /* GPU acceleration hint */
+.host:hover .outline {
+  border-color: var(--_hover-outline-color, var(--_outline-color));
 }
 
-@keyframes ripple-anim {
-  0% {
-    transform: scale(0);
-    opacity: 0.12;
+.host:active .outline {
+  border-color: var(--_pressed-outline-color, var(--_outline-color));
+}
+
+.host:is(.disabled, .softDisabled) .outline {
+  border-color: var(--_disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));
+  opacity: 0.12;
+}
+
+@media (forced-colors: active) {
+  .outline {
+    border-color: CanvasText;
   }
 
-  100% {
-    transform: scale(1);
-    opacity: 0;
+  .host:is(.disabled, .softDisabled) .outline {
+    border-color: GrayText;
+    opacity: 1;
   }
 }
+
+/* ==========================================================================
+   VARIANT STYLES
+   ========================================================================== */
+
+/* Filled Button (Primary Action) */
+.filled {
+  --_container-color: var(--md-filled-button-container-color, var(--md-sys-color-primary, #6750a4));
+  --_label-text-color: var(--md-filled-button-label-text-color, var(--md-sys-color-on-primary, #ffffff));
+  --_hover-label-text-color: var(--md-filled-button-hover-label-text-color, var(--md-sys-color-on-primary, #ffffff));
+  --_focus-label-text-color: var(--md-filled-button-focus-label-text-color, var(--md-sys-color-on-primary, #ffffff));
+  --_pressed-label-text-color: var(--md-filled-button-pressed-label-text-color, var(--md-sys-color-on-primary, #ffffff));
+  --_hover-state-layer-color: var(--md-filled-button-hover-state-layer-color, var(--md-sys-color-on-primary, #ffffff));
+  --_pressed-state-layer-color: var(--md-filled-button-pressed-state-layer-color, var(--md-sys-color-on-primary, #ffffff));
+  --_disabled-container-color: var(--md-filled-button-disabled-container-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_disabled-label-text-color: var(--md-filled-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_icon-color: var(--md-filled-button-icon-color, var(--md-sys-color-on-primary, #ffffff));
+  --_hover-icon-color: var(--md-filled-button-hover-icon-color, var(--md-sys-color-on-primary, #ffffff));
+  --_focus-icon-color: var(--md-filled-button-focus-icon-color, var(--md-sys-color-on-primary, #ffffff));
+  --_pressed-icon-color: var(--md-filled-button-pressed-icon-color, var(--md-sys-color-on-primary, #ffffff));
+  --_disabled-icon-color: var(--md-filled-button-disabled-icon-color, var(--md-sys-color-on-surface, #1c1b1f));
+}
+
+/* Outlined Button (Secondary Action) */
+.outlined {
+  --_container-color: transparent;
+  --_label-text-color: var(--md-outlined-button-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-label-text-color: var(--md-outlined-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_focus-label-text-color: var(--md-outlined-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-label-text-color: var(--md-outlined-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-state-layer-color: var(--md-outlined-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-state-layer-color: var(--md-outlined-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));
+  --_outline-color: var(--md-outlined-button-outline-color, var(--md-sys-color-outline, #79747e));
+  --_hover-outline-color: var(--md-outlined-button-hover-outline-color, var(--md-sys-color-outline, #79747e));
+  --_pressed-outline-color: var(--md-outlined-button-pressed-outline-color, var(--md-sys-color-outline, #79747e));
+  --_disabled-label-text-color: var(--md-outlined-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_disabled-outline-color: var(--md-outlined-button-disabled-outline-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_icon-color: var(--md-outlined-button-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-icon-color: var(--md-outlined-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_focus-icon-color: var(--md-outlined-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-icon-color: var(--md-outlined-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_disabled-icon-color: var(--md-outlined-button-disabled-icon-color, var(--md-sys-color-on-surface, #1c1b1f));
+}
+
+.outlined .background {
+  background: transparent;
+}
+
+/* Text Button (Tertiary Action) */
+.text {
+  --_container-color: transparent;
+  --_label-text-color: var(--md-text-button-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-label-text-color: var(--md-text-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_focus-label-text-color: var(--md-text-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-label-text-color: var(--md-text-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-state-layer-color: var(--md-text-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-state-layer-color: var(--md-text-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));
+  --_disabled-label-text-color: var(--md-text-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_icon-color: var(--md-text-button-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-icon-color: var(--md-text-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_focus-icon-color: var(--md-text-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-icon-color: var(--md-text-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_disabled-icon-color: var(--md-text-button-disabled-icon-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_leading-space: 12px;
+  --_trailing-space: 12px;
+  --_with-leading-icon-leading-space: 12px;
+  --_with-leading-icon-trailing-space: 16px;
+  --_with-trailing-icon-leading-space: 16px;
+  --_with-trailing-icon-trailing-space: 12px;
+}
+
+.text .background {
+  background: transparent;
+}
+
+/* Elevated Button (For patterned backgrounds) */
+.elevated {
+  --_container-color: var(--md-elevated-button-container-color, var(--md-sys-color-surface-container-low, #f7f2fa));
+  --_label-text-color: var(--md-elevated-button-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-label-text-color: var(--md-elevated-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_focus-label-text-color: var(--md-elevated-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-label-text-color: var(--md-elevated-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-state-layer-color: var(--md-elevated-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-state-layer-color: var(--md-elevated-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));
+  --_disabled-container-color: var(--md-elevated-button-disabled-container-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_disabled-label-text-color: var(--md-elevated-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_icon-color: var(--md-elevated-button-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_hover-icon-color: var(--md-elevated-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_focus-icon-color: var(--md-elevated-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-icon-color: var(--md-elevated-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));
+  --_disabled-icon-color: var(--md-elevated-button-disabled-icon-color, var(--md-sys-color-on-surface, #1c1b1f));
+}
+
+/* Tonal Button (Filled Tonal - Secondary Container) */
+.tonal {
+  --_container-color: var(--md-filled-tonal-button-container-color, var(--md-sys-color-secondary-container, #e8def8));
+  --_label-text-color: var(--md-filled-tonal-button-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_hover-label-text-color: var(--md-filled-tonal-button-hover-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_focus-label-text-color: var(--md-filled-tonal-button-focus-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_pressed-label-text-color: var(--md-filled-tonal-button-pressed-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_hover-state-layer-color: var(--md-filled-tonal-button-hover-state-layer-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_pressed-state-layer-color: var(--md-filled-tonal-button-pressed-state-layer-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_disabled-container-color: var(--md-filled-tonal-button-disabled-container-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_disabled-label-text-color: var(--md-filled-tonal-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1c1b1f));
+  --_icon-color: var(--md-filled-tonal-button-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_hover-icon-color: var(--md-filled-tonal-button-hover-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_focus-icon-color: var(--md-filled-tonal-button-focus-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_pressed-icon-color: var(--md-filled-tonal-button-pressed-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));
+  --_disabled-icon-color: var(--md-filled-tonal-button-disabled-icon-color, var(--md-sys-color-on-surface, #1c1b1f));
+}
+
+

@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "m3-pure",
+  "version": "0.1.0",
+  "description": "Material Design 3 components for React",
+  "repository": "https://github.com/material-components/material-web",
+  "components": {
+    "button": {
+      "name": "Button",
+      "description": "M3 Common Button with 5 variants (filled, outlined, text, elevated, tonal)",
+      "version": "0.1.0",
+      "files": [
+        {
+          "name": "button.tsx",
+          "path": "components/Button/Button.tsx",
+          "type": "component"
+        },
+        {
+          "name": "button.module.css",
+          "path": "components/Button/Button.module.css",
+          "type": "style"
+        }
+      ],
+      "dependencies": [],
+      "hooks": ["useRipple"],
+      "styles": ["theme"],
+      "docs": "https://m3.material.io/components/buttons",
+      "source": "https://github.com/material-components/material-web/tree/main/button"
+    }
+  },
+  "hooks": {
+    "useRipple": {
+      "name": "useRipple",
+      "description": "Hook for managing ripple effect state and animations",
+      "version": "0.1.0",
+      "files": [
+        {
+          "name": "use-ripple.ts",
+          "path": "hooks/useRipple.ts",
+          "type": "hook"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "theme": {
+      "name": "M3 Theme",
+      "description": "Material Design 3 design tokens and CSS custom properties",
+      "version": "0.1.0",
+      "files": [
+        {
+          "name": "m3-theme.css",
+          "path": "styles/theme.css",
+          "type": "style"
+        }
+      ]
+    },
+    "global": {
+      "name": "Global Styles",
+      "description": "Global CSS reset and base styles",
+      "version": "0.1.0",
+      "files": [
+        {
+          "name": "m3-global.css",
+          "path": "styles/global.css",
+          "type": "style"
+        }
+      ]
+    }
+  },
+  "tokens": {
+    "colors": {
+      "primary": "#6750a4",
+      "onPrimary": "#ffffff",
+      "primaryContainer": "#eaddff",
+      "onPrimaryContainer": "#21005d",
+      "secondary": "#625b71",
+      "onSecondary": "#ffffff",
+      "secondaryContainer": "#e8def8",
+      "onSecondaryContainer": "#1d192b",
+      "tertiary": "#7d5260",
+      "onTertiary": "#ffffff",
+      "tertiaryContainer": "#ffd8e4",
+      "onTertiaryContainer": "#31111d",
+      "error": "#b3261e",
+      "onError": "#ffffff",
+      "errorContainer": "#f9dedc",
+      "onErrorContainer": "#410e0b",
+      "surface": "#fef7ff",
+      "onSurface": "#1d1b20",
+      "surfaceVariant": "#e7e0ec",
+      "onSurfaceVariant": "#49454f",
+      "outline": "#79747e",
+      "outlineVariant": "#cac4d0",
+      "shadow": "#000000",
+      "scrim": "#000000",
+      "inverseSurface": "#322f35",
+      "inverseOnSurface": "#f5eff7",
+      "inversePrimary": "#d0bcff"
+    },
+    "elevation": {
+      "level0": "none",
+      "level1": "0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15)",
+      "level2": "0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
+      "level3": "0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15)",
+      "level4": "0px 2px 3px 0px rgba(0, 0, 0, 0.3), 0px 6px 10px 4px rgba(0, 0, 0, 0.15)",
+      "level5": "0px 4px 4px 0px rgba(0, 0, 0, 0.3), 0px 8px 12px 6px rgba(0, 0, 0, 0.15)"
+    },
+    "shape": {
+      "cornerNone": "0px",
+      "cornerExtraSmall": "4px",
+      "cornerSmall": "8px",
+      "cornerMedium": "12px",
+      "cornerLarge": "16px",
+      "cornerExtraLarge": "28px",
+      "cornerFull": "9999px"
+    },
+    "state": {
+      "hoverOpacity": "0.08",
+      "focusOpacity": "0.1",
+      "pressedOpacity": "0.1",
+      "draggedOpacity": "0.16",
+      "disabledOpacity": "0.38",
+      "disabledContainerOpacity": "0.12"
+    }
+  }
+}
