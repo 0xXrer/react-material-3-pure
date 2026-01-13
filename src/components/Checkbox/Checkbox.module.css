@@ -1,0 +1,530 @@
+/**
+ * @license
+ * Copyright 2022 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * Material Design 3 Checkbox Styles
+ *
+ * Ported from @material/web checkbox component.
+ * @see https://github.com/material-components/material-web/tree/main/checkbox
+ *
+ * Uses CSS custom properties matching the Material Web token structure.
+ */
+
+/* Motion token values */
+:root {
+  --_md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --_md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+/* The stroke width of the icon marks */
+/* The coordinates in an 18px viewBox of the marks */
+
+/* ==========================================================================
+   HOST (Container Wrapper)
+   ========================================================================== */
+
+.host {
+  /* Container shape tokens */
+  --_container-shape: var(--md-checkbox-container-shape, 2px);
+  --_container-size: var(--md-checkbox-container-size, 18px);
+
+  /* Outline tokens */
+  --_outline-color: var(--md-checkbox-outline-color, var(--md-sys-color-on-surface-variant, #49454f));
+  --_outline-width: var(--md-checkbox-outline-width, 2px);
+
+  /* Selected container color */
+  --_selected-container-color: var(--md-checkbox-selected-container-color, var(--md-sys-color-primary, #6750a4));
+
+  /* Icon tokens */
+  --_selected-icon-color: var(--md-checkbox-selected-icon-color, var(--md-sys-color-on-primary, #fff));
+  --_icon-size: var(--md-checkbox-icon-size, 18px);
+
+  /* State layer tokens */
+  --_state-layer-size: var(--md-checkbox-state-layer-size, 40px);
+  --_state-layer-shape: var(--md-checkbox-state-layer-shape, 9999px);
+
+  /* Hover states */
+  --_hover-outline-color: var(--md-checkbox-hover-outline-color, var(--md-sys-color-on-surface, #1d1b20));
+  --_hover-outline-width: var(--md-checkbox-hover-outline-width, 2px);
+  --_hover-state-layer-color: var(--md-checkbox-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));
+  --_hover-state-layer-opacity: var(--md-checkbox-hover-state-layer-opacity, 0.08);
+  --_selected-hover-container-color: var(--md-checkbox-selected-hover-container-color, var(--md-sys-color-primary, #6750a4));
+  --_selected-hover-icon-color: var(--md-checkbox-selected-hover-icon-color, var(--md-sys-color-on-primary, #fff));
+  --_selected-hover-state-layer-color: var(--md-checkbox-selected-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));
+  --_selected-hover-state-layer-opacity: var(--md-checkbox-selected-hover-state-layer-opacity, 0.08);
+
+  /* Focus states */
+  --_focus-outline-color: var(--md-checkbox-focus-outline-color, var(--md-sys-color-on-surface, #1d1b20));
+  --_focus-outline-width: var(--md-checkbox-focus-outline-width, 2px);
+  --_selected-focus-container-color: var(--md-checkbox-selected-focus-container-color, var(--md-sys-color-primary, #6750a4));
+  --_selected-focus-icon-color: var(--md-checkbox-selected-focus-icon-color, var(--md-sys-color-on-primary, #fff));
+
+  /* Pressed states */
+  --_pressed-outline-color: var(--md-checkbox-pressed-outline-color, var(--md-sys-color-on-surface, #1d1b20));
+  --_pressed-outline-width: var(--md-checkbox-pressed-outline-width, 2px);
+  --_pressed-state-layer-color: var(--md-checkbox-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));
+  --_pressed-state-layer-opacity: var(--md-checkbox-pressed-state-layer-opacity, 0.12);
+  --_selected-pressed-container-color: var(--md-checkbox-selected-pressed-container-color, var(--md-sys-color-primary, #6750a4));
+  --_selected-pressed-icon-color: var(--md-checkbox-selected-pressed-icon-color, var(--md-sys-color-on-primary, #fff));
+  --_selected-pressed-state-layer-color: var(--md-checkbox-selected-pressed-state-layer-color, var(--md-sys-color-on-primary, #6750a4));
+  --_selected-pressed-state-layer-opacity: var(--md-checkbox-selected-pressed-state-layer-opacity, 0.12);
+
+  /* Disabled states */
+  --_disabled-outline-color: var(--md-checkbox-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));
+  --_disabled-outline-width: var(--md-checkbox-disabled-outline-width, 2px);
+  --_disabled-container-opacity: var(--md-checkbox-disabled-container-opacity, 0.38);
+  --_selected-disabled-container-color: var(--md-checkbox-selected-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));
+  --_selected-disabled-container-opacity: var(--md-checkbox-selected-disabled-container-opacity, 0.38);
+  --_selected-disabled-icon-color: var(--md-checkbox-selected-disabled-icon-color, var(--md-sys-color-surface, #fef7ff));
+
+  border-radius: var(--_container-shape);
+  display: inline-flex;
+  height: var(--_container-size);
+  position: relative;
+  vertical-align: top;
+  width: var(--_container-size);
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.host.disabled {
+  cursor: default;
+}
+
+.host.touchTargetWrapper {
+  margin: max(0px, calc((48px - var(--_container-size)) / 2));
+}
+
+/* ==========================================================================
+   CONTAINER
+   ========================================================================== */
+
+.container {
+  border-radius: inherit;
+  display: flex;
+  height: 100%;
+  place-content: center;
+  place-items: center;
+  position: relative;
+  width: 100%;
+}
+
+/* ==========================================================================
+   INPUT (also serves as touch target)
+   ========================================================================== */
+
+.input {
+  appearance: none;
+  height: 48px;
+  margin: 0;
+  opacity: 0;
+  outline: none;
+  position: absolute;
+  width: 48px;
+  z-index: 1;
+  cursor: inherit;
+}
+
+.host[data-touch-target="none"] .input {
+  height: 100%;
+  width: 100%;
+}
+
+/* ==========================================================================
+   OUTLINE, BACKGROUND, ICON (shared positioning)
+   ========================================================================== */
+
+.outline,
+.background,
+.icon {
+  inset: 0;
+  position: absolute;
+}
+
+.outline,
+.background {
+  border-radius: inherit;
+}
+
+/* ==========================================================================
+   OUTLINE (visible when unchecked)
+   ========================================================================== */
+
+.outline {
+  border-color: var(--_outline-color);
+  border-style: solid;
+  border-width: var(--_outline-width);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   BACKGROUND (visible when checked/indeterminate)
+   ========================================================================== */
+
+.background {
+  background-color: var(--_selected-container-color);
+}
+
+/* Background and icon transitions */
+.background,
+.icon {
+  opacity: 0;
+  transition-duration: 150ms, 50ms;
+  transition-property: transform, opacity;
+  transition-timing-function: var(--_md-sys-motion-easing-emphasized-accelerate), linear;
+  transform: scale(0.6);
+}
+
+.selected .background,
+.selected .icon {
+  opacity: 1;
+  transition-duration: 350ms, 50ms;
+  transition-timing-function: var(--_md-sys-motion-easing-emphasized-decelerate), linear;
+  transform: scale(1);
+}
+
+/* ==========================================================================
+   FOCUS RING
+   ========================================================================== */
+
+.focusRing {
+  --md-focus-ring-color: var(--md-sys-color-secondary, #625b71);
+  --md-focus-ring-width: 3px;
+  --md-focus-ring-outward-offset: 2px;
+  --md-focus-ring-active-width: 8px;
+  --md-focus-ring-duration: 600ms;
+
+  animation-delay: 0s, calc(var(--md-focus-ring-duration) * 0.25);
+  animation-duration: calc(var(--md-focus-ring-duration) * 0.25), calc(var(--md-focus-ring-duration) * 0.75);
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  box-sizing: border-box;
+  color: var(--md-focus-ring-color);
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  height: 44px;
+  width: 44px;
+  inset: unset;
+  border-radius: 50%;
+  animation-name: focus-grow, focus-shrink;
+  outline: var(--md-focus-ring-width) solid currentColor;
+  z-index: 1;
+}
+
+.container:has(.input:focus-visible) .focusRing {
+  display: flex;
+}
+
+@keyframes focus-grow {
+  from {
+    outline-width: 0;
+  }
+  to {
+    outline-width: var(--md-focus-ring-active-width);
+  }
+}
+
+@keyframes focus-shrink {
+  from {
+    outline-width: var(--md-focus-ring-active-width);
+  }
+}
+
+/* ==========================================================================
+   RIPPLE
+   ========================================================================== */
+
+.ripple {
+  border-radius: var(--_state-layer-shape);
+  height: var(--_state-layer-size);
+  width: var(--_state-layer-size);
+  inset: unset;
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hover state layer */
+.ripple::before {
+  content: '';
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+  background-color: var(--_hover-state-layer-color);
+  transition: opacity 15ms linear, background-color 15ms linear;
+  border-radius: inherit;
+}
+
+/* Press ripple effect */
+.ripple::after {
+  content: '';
+  opacity: 0;
+  position: absolute;
+  background: radial-gradient(
+    closest-side,
+    var(--_pressed-state-layer-color) max(calc(100% - 70px), 65%),
+    transparent 100%
+  );
+  transform-origin: center center;
+  transition: opacity 375ms linear;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* Hover state */
+.ripple.hovered::before {
+  background-color: var(--_hover-state-layer-color);
+  opacity: var(--_hover-state-layer-opacity);
+}
+
+/* Pressed state */
+.ripple.pressed::after {
+  opacity: var(--_pressed-state-layer-opacity);
+  transition-duration: 105ms;
+}
+
+/* Selected hover state */
+.ripple.selected::before {
+  background-color: var(--_selected-hover-state-layer-color);
+}
+
+.ripple.selected.hovered::before {
+  opacity: var(--_selected-hover-state-layer-opacity);
+}
+
+/* Selected pressed state */
+.ripple.selected::after {
+  background: radial-gradient(
+    closest-side,
+    var(--_selected-pressed-state-layer-color) max(calc(100% - 70px), 65%),
+    transparent 100%
+  );
+}
+
+.ripple.selected.pressed::after {
+  opacity: var(--_selected-pressed-state-layer-opacity);
+}
+
+.disabled .ripple {
+  display: none;
+}
+
+/* ==========================================================================
+   ICON (Checkmark / Indeterminate mark)
+   ========================================================================== */
+
+.icon {
+  fill: var(--_selected-icon-color);
+  height: var(--_icon-size);
+  width: var(--_icon-size);
+}
+
+/* Mark common styles */
+.mark {
+  animation-duration: 150ms;
+  animation-timing-function: var(--_md-sys-motion-easing-emphasized-accelerate);
+  transition-duration: 150ms;
+  transition-timing-function: var(--_md-sys-motion-easing-emphasized-accelerate);
+  fill: inherit;
+}
+
+.selected .mark {
+  animation-duration: 350ms;
+  animation-timing-function: var(--_md-sys-motion-easing-emphasized-decelerate);
+  transition-duration: 350ms;
+  transition-timing-function: var(--_md-sys-motion-easing-emphasized-decelerate);
+}
+
+/* Short mark (smaller part of checkmark) - initially hidden behind long mark */
+.mark.short {
+  height: 2px;
+  width: 2px;
+  transition-property: transform, height;
+  /* Start in indeterminate position (hidden behind long mark) */
+  transform: scaleY(-1) translate(4px, -10px) rotate(0deg);
+}
+
+/* Long mark (larger part of checkmark / indeterminate line) */
+.mark.long {
+  height: 2px;
+  width: 10px;
+  transition-property: transform, width;
+  /* Start in indeterminate position */
+  transform: scaleY(-1) translate(4px, -10px) rotate(0deg);
+}
+
+/* Checkmark state */
+.checked .mark,
+.prevChecked.unselected .mark {
+  /* Transform from bottom left, flipped Y for Safari fix */
+  transform: scaleY(-1) translate(7px, -14px) rotate(45deg);
+}
+
+.checked .mark.short,
+.prevChecked.unselected .mark.short {
+  /* √(4*4 + 4*4) ≈ 5.66px */
+  height: 5.66px;
+}
+
+.checked .mark.long,
+.prevChecked.unselected .mark.long {
+  /* √(8*8 + 8*8) ≈ 11.31px */
+  width: 11.31px;
+}
+
+/* Indeterminate state */
+.indeterminate .mark,
+.prevIndeterminate.unselected .mark {
+  transform: scaleY(-1) translate(4px, -10px) rotate(0deg);
+}
+
+.indeterminate .mark.short,
+.prevIndeterminate.unselected .mark.short {
+  /* Hide short mark for indeterminate */
+  height: 2px;
+}
+
+.indeterminate .mark.long,
+.prevIndeterminate.unselected .mark.long {
+  /* Full width line for indeterminate */
+  width: 10px;
+}
+
+/* When selecting from unselected, don't transition marks - animate instead */
+.prevUnselected .mark {
+  transition-property: none;
+}
+
+/* Animation for checking from unselected - long mark grows */
+.prevUnselected.checked .mark.long {
+  animation-name: prev-unselected-to-checked;
+}
+
+@keyframes prev-unselected-to-checked {
+  from {
+    width: 0;
+  }
+}
+
+/* Animation for indeterminate from unselected */
+.prevUnselected.indeterminate .mark.long {
+  animation-name: prev-unselected-to-indeterminate;
+}
+
+@keyframes prev-unselected-to-indeterminate {
+  from {
+    width: 0;
+  }
+}
+
+/* ==========================================================================
+   INTERACTIVE STATES
+   ========================================================================== */
+
+/* Hover */
+.container:hover .outline {
+  border-color: var(--_hover-outline-color);
+  border-width: var(--_hover-outline-width);
+}
+
+.container:hover .background {
+  background: var(--_selected-hover-container-color);
+}
+
+.container:hover .icon {
+  fill: var(--_selected-hover-icon-color);
+}
+
+/* Focus */
+.container:focus-within .outline {
+  border-color: var(--_focus-outline-color);
+  border-width: var(--_focus-outline-width);
+}
+
+.container:focus-within .background {
+  background: var(--_selected-focus-container-color);
+}
+
+.container:focus-within .icon {
+  fill: var(--_selected-focus-icon-color);
+}
+
+/* Pressed/Active */
+.container:active .outline {
+  border-color: var(--_pressed-outline-color);
+  border-width: var(--_pressed-outline-width);
+}
+
+.container:active .background {
+  background: var(--_selected-pressed-container-color);
+}
+
+.container:active .icon {
+  fill: var(--_selected-pressed-icon-color);
+}
+
+/* ==========================================================================
+   DISABLED STATES
+   ========================================================================== */
+
+/* Disable animations when entering/exiting disabled state */
+.disabled .background,
+.disabled .icon,
+.disabled .mark,
+.prevDisabled .background,
+.prevDisabled .icon,
+.prevDisabled .mark {
+  animation-duration: 0s;
+  transition-duration: 0s;
+}
+
+.disabled .outline {
+  border-color: var(--_disabled-outline-color);
+  border-width: var(--_disabled-outline-width);
+  opacity: var(--_disabled-container-opacity);
+}
+
+.selected.disabled .outline {
+  visibility: hidden;
+}
+
+.selected.disabled .background {
+  background: var(--_selected-disabled-container-color);
+  opacity: var(--_selected-disabled-container-opacity);
+}
+
+.disabled .icon {
+  fill: var(--_selected-disabled-icon-color);
+}
+
+/* ==========================================================================
+   HIGH CONTRAST MODE (forced-colors)
+   ========================================================================== */
+
+@media (forced-colors: active) {
+  .background {
+    background-color: CanvasText;
+  }
+
+  .selected.disabled .background {
+    background-color: GrayText;
+    opacity: 1;
+  }
+
+  .outline {
+    border-color: CanvasText;
+  }
+
+  .disabled .outline {
+    border-color: GrayText;
+    opacity: 1;
+  }
+
+  .icon {
+    fill: Canvas;
+  }
+}
