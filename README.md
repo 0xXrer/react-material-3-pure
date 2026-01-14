@@ -5,17 +5,17 @@ A production-ready, pixel-perfect implementation of Google's **Material Design 3
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev/)
 [![Storybook](https://img.shields.io/badge/Storybook-10-ff4785.svg)](https://storybook.js.org/)
-[![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
 ## ✨ Features
 
 - 🎨 **Pixel-perfect M3 implementation** — Follows the official [Material Design 3 specification](https://m3.material.io/)
 - 🚫 **Zero dependencies** — Pure React + CSS Modules, no external UI libraries
-- 🎭 **State Layer system** — Authentic M3 interaction states (not simple color changes)
-- 💧 **Ripple effects** — Hardware-accelerated ink ripples from click coordinates
-- ♿ **Accessible** — Full ARIA support, keyboard navigation, screen reader friendly
-- 🎯 **Type-safe** — Complete TypeScript definitions with JSDoc documentation
-- 🧪 **100% tested** — Comprehensive test coverage with Storybook + Vitest
+- ⚡ **SSR-safe** — Works with Next.js App Router out of the box
+- 🎭 **State Layer system** — Authentic M3 interaction states
+- 💧 **Ripple effects** — Hardware-accelerated ink ripples
+- ♿ **Accessible** — Full ARIA support, keyboard navigation
+- 🎯 **Type-safe** — Complete TypeScript definitions
 - 🎨 **Themeable** — CSS custom properties for easy customization
 
 ## 📦 Installation
@@ -27,16 +27,16 @@ npm install react-material-3-pure
 ## 🚀 Quick Start
 
 ```tsx
-import { Button } from 'react-material-3-pure';
-import 'react-material-3-pure/styles/theme.css';
+import { Button, Dialog, Checkbox, ThemeProvider } from 'react-material-3-pure';
+import 'react-material-3-pure/styles.css';
 
 function App() {
   return (
-    <div>
-      <Button variant="filled" onClick={() => console.log('Clicked!')}>
+    <ThemeProvider>
+      <Button onClick={() => console.log('Clicked!')}>
         Click Me
       </Button>
-    </div>
+    </ThemeProvider>
   );
 }
 ```
@@ -45,7 +45,7 @@ function App() {
 
 ### Button
 
-A production-ready Material Design 3 button with 5 visual variants.
+Simple shadcn-style API — icons and text are just children.
 
 ```tsx
 import { Button } from 'react-material-3-pure';
@@ -57,11 +57,33 @@ import { Button } from 'react-material-3-pure';
 <Button variant="outlined">Outlined</Button> // Medium emphasis
 <Button variant="text">Text</Button>         // Low emphasis
 
-// With icons
-<Button startIcon={<PlusIcon />}>Add Item</Button>
-<Button endIcon={<ArrowIcon />}>Continue</Button>
+// With icons — just add as children!
+<Button>
+  <PlusIcon />
+  Add Item
+</Button>
 
-// Disabled state
+<Button>
+  Continue
+  <ArrowIcon />
+</Button>
+
+// Icon only
+<Button size="icon" aria-label="Settings">
+  <SettingsIcon />
+</Button>
+
+// As link
+<Button as="a" href="/about" variant="text">
+  Learn More
+</Button>
+
+// Sizes
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+
+// Disabled
 <Button disabled>Disabled</Button>
 ```
 
@@ -69,104 +91,138 @@ import { Button } from 'react-material-3-pure';
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'filled' \| 'outlined' \| 'text' \| 'elevated' \| 'tonal'` | `'filled'` | Visual style of the button |
-| `startIcon` | `ReactNode` | — | Icon before the button text |
-| `endIcon` | `ReactNode` | — | Icon after the button text |
+| `variant` | `'filled' \| 'outlined' \| 'text' \| 'elevated' \| 'tonal'` | `'filled'` | Visual style |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'icon'` | `'md'` | Button size |
+| `as` | `'button' \| 'a'` | `'button'` | Render as button or anchor |
 | `disabled` | `boolean` | `false` | Disable the button |
-| `children` | `ReactNode` | — | Button label text |
-| `...props` | `ButtonHTMLAttributes` | — | All native button attributes |
+| `children` | `ReactNode` | — | Content (text, icons, etc.) |
 
-#### Variant Usage Guide
+### Dialog
 
-| Variant | Emphasis | Use Case |
-|---------|----------|----------|
-| `filled` | High | Primary actions (Save, Confirm, Submit) |
-| `tonal` | Medium | Secondary actions with emphasis |
-| `elevated` | Medium | Actions needing visual separation from patterned backgrounds |
-| `outlined` | Medium | Secondary actions, cancel buttons |
-| `text` | Low | Tertiary actions (Learn more, View all) |
+Modal dialog with M3 animations.
+
+```tsx
+import { Dialog, Button } from 'react-material-3-pure';
+
+function MyDialog() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open Dialog</Button>
+      
+      <Dialog
+        open={open}
+        headline="Confirm Action"
+        onClose={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        actions={
+          <>
+            <Button variant="text" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => setOpen(false)}>
+              Confirm
+            </Button>
+          </>
+        }
+      >
+        <p>Are you sure you want to proceed?</p>
+      </Dialog>
+    </>
+  );
+}
+```
+
+### Checkbox
+
+M3 checkbox with indeterminate state support.
+
+```tsx
+import { Checkbox } from 'react-material-3-pure';
+
+<Checkbox />
+<Checkbox checked />
+<Checkbox indeterminate />
+<Checkbox disabled />
+```
+
+### Chips
+
+Filter, assist, input, and suggestion chips.
+
+```tsx
+import { FilterChip, AssistChip, InputChip, SuggestionChip } from 'react-material-3-pure';
+
+<FilterChip selected>Selected</FilterChip>
+<AssistChip icon={<CalendarIcon />}>Schedule</AssistChip>
+<InputChip onRemove={() => {}}>Tag</InputChip>
+<SuggestionChip>Try this</SuggestionChip>
+```
+
+### Divider
+
+Visual separator for content.
+
+```tsx
+import { Divider } from 'react-material-3-pure';
+
+<Divider />
+<Divider inset />
+<Divider insetStart />
+<Divider insetEnd />
+```
+
+### ThemeProvider
+
+Theme context for light/dark mode.
+
+```tsx
+import { ThemeProvider, useTheme } from 'react-material-3-pure';
+
+function App() {
+  return (
+    <ThemeProvider defaultMode="system">
+      <MyApp />
+    </ThemeProvider>
+  );
+}
+
+function ThemeToggle() {
+  const { mode, toggleMode, resolvedMode } = useTheme();
+  return <Button onClick={toggleMode}>{resolvedMode}</Button>;
+}
+```
 
 ## 🎨 Theming
 
-The library uses CSS custom properties for theming. Override the default M3 tokens in your CSS:
+Override M3 tokens with CSS custom properties:
 
 ```css
 :root {
-  /* Primary color */
   --md-sys-color-primary: #6750A4;
   --md-sys-color-on-primary: #FFFFFF;
-  
-  /* Secondary container (tonal button) */
   --md-sys-color-secondary-container: #E8DEF8;
   --md-sys-color-on-secondary-container: #1D192B;
-  
-  /* Surface (elevated button) */
   --md-sys-color-surface-container-low: #F7F2FA;
-  
-  /* Outline (outlined button border) */
   --md-sys-color-outline: #79747E;
-  
-  /* State layer opacities */
-  --md-sys-state-hover-state-layer-opacity: 0.08;
-  --md-sys-state-focus-state-layer-opacity: 0.12;
-  --md-sys-state-pressed-state-layer-opacity: 0.12;
 }
-```
 
-### Dark Mode Example
-
-```css
-.dark-theme {
+/* Dark mode */
+[data-theme="dark"] {
   --md-sys-color-primary: #D0BCFF;
   --md-sys-color-on-primary: #381E72;
   --md-sys-color-surface-container-low: #1D1B20;
-  --md-sys-color-secondary-container: #4A4458;
-  --md-sys-color-on-secondary-container: #E8DEF8;
-  --md-sys-color-outline: #938F99;
 }
 ```
-
-## 🏗️ Architecture
-
-### State Layer (M3 Core Concept)
-
-Unlike traditional hover effects that change background colors, M3 uses a **State Layer** — a semi-transparent overlay that indicates interaction state:
-
-```
-┌─────────────────────────────────────────────┐
-│ Button Container                            │
-│ ├─ ::before (State Layer, z-index: 0)      │
-│ │   └─ opacity: 0% → 8% (hover) → 12% (press)
-│ ├─ Ripple Container (z-index: 1)           │
-│ └─ Content (z-index: 2)                    │
-└─────────────────────────────────────────────┘
-```
-
-### Ripple Effect
-
-Hardware-accelerated ink ripple that:
-- Originates from click coordinates
-- Scales to cover the entire button
-- Fades out over 600ms
-- Uses `will-change: transform, opacity` for GPU acceleration
 
 ## 🧪 Development
 
 ```bash
-# Install dependencies
-npm install
-
-# Start Storybook
-npm run storybook
-
-# Run tests with coverage
-npx vitest --coverage
-
-# Build library
-npm run build
-
-# Lint
-npm run lint
+npm install          # Install dependencies
+npm run storybook    # Start Storybook
+npm run build        # Build library
+npm run lint         # Lint
 ```
 
 ## 📁 Project Structure
@@ -174,26 +230,16 @@ npm run lint
 ```
 src/
 ├── components/
-│   └── Button/
-│       ├── Button.tsx          # Component implementation
-│       ├── Button.module.css   # M3 styles with state layers
-│       ├── Button.stories.tsx  # Storybook stories + tests
-│       └── index.ts            # Exports
+│   ├── Button/
+│   ├── Checkbox/
+│   ├── Chip/
+│   ├── Dialog/
+│   ├── Divider/
+│   └── ThemeProvider/
 ├── hooks/
-│   ├── useRipple.ts            # Ripple effect hook
-│   └── index.ts
-├── styles/
-│   ├── theme.css               # M3 design tokens
-│   └── global.css              # Base styles
-└── index.ts                    # Library entry point
+│   └── useRipple.ts
+└── index.ts
 ```
-
-## 📚 Resources
-
-- [Material Design 3 Buttons Spec](https://m3.material.io/components/buttons)
-- [M3 Color System](https://m3.material.io/styles/color)
-- [M3 State Layers](https://m3.material.io/foundations/interaction/states)
-- [M3 Typography](https://m3.material.io/styles/typography)
 
 ## 📄 License
 
