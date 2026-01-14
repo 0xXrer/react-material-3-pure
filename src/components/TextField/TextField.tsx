@@ -199,22 +199,22 @@ export const TextField = forwardRef<TextFieldRef, TextFieldProps>(
             )}
 
             {variant === 'outlined' && (
-              <div className={styles.outline} aria-hidden="true">
-                <div className={styles.outlineStart} />
-                <div className={styles.outlineNotch}>
-                  <div className={styles.outlinePanelInactive} />
-                  <div className={styles.outlinePanelActive} />
-                  {hasLabel && (focused || populated) && (
-                    <div className={styles.outlineLabel}>
-                      <span className={cn(styles.label, styles.floating)}>
-                        {label}
-                        {required && !disabled && '*'}
-                      </span>
-                    </div>
-                  )}
+                <div className={styles.outline} aria-hidden="true">
+                  <div className={styles.outlineStart} />
+                  <div className={styles.outlineNotch}>
+                    <div className={styles.outlinePanelInactive} />
+                    <div className={styles.outlinePanelActive} />
+                    {hasLabel && (focused || populated) && (
+                      <div className={styles.outlineLabel}>
+                        <span className={cn(styles.label, styles.floating)}>
+                          {label}
+                          {required && !disabled && '*'}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className={styles.outlineEnd} />
                 </div>
-                <div className={styles.outlineEnd} />
-              </div>
             )}
 
             <div className={styles.container}>
@@ -225,20 +225,17 @@ export const TextField = forwardRef<TextFieldRef, TextFieldProps>(
               )}
 
               <div className={styles.middle}>
-                {variant === 'outlined' && hasLabel && (
-                  <div className={styles.labelWrapper}>
-                    <span
-                      id={labelId}
-                      className={cn(
-                        styles.label,
-                        focused || populated ? styles.floating : styles.resting
-                      )}
-                    >
-                      {label}
-                      {required && !disabled && '*'}
-                    </span>
-                  </div>
-                )}
+                  {variant === 'outlined' && hasLabel && !(focused || populated) && (
+                    <div className={styles.labelWrapper}>
+                      <span
+                        id={labelId}
+                        className={cn(styles.label, styles.resting)}
+                      >
+                        {label}
+                        {required && !disabled && '*'}
+                      </span>
+                    </div>
+                  )}
 
                 {variant === 'filled' && hasLabel && (
                   <div className={styles.labelWrapper}>

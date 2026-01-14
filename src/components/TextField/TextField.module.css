@@ -271,6 +271,10 @@
   display: flex;
   max-width: 100%;
   transform: translateY(calc(-50% - 0.5px));
+  background: var(--md-sys-color-surface, #232025);
+  padding: 0 4px;
+  border-radius: 4px;
+  z-index: 2;
 }
 
 .outlined.noLabel .outlineNotch {
@@ -345,10 +349,6 @@
 }
 
 /* Outlined label - hidden when floating (shown in notch instead) */
-.outlined .label.floating {
-  opacity: 0;
-  pointer-events: none;
-}
 
 .outlined .label.resting {
   position: absolute;
