@@ -1,0 +1,459 @@
+/* Field Component Styles - Material Design 3 */
+
+/* Variables */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  --field-container-color: var(--md-filled-field-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));
+  --field-container-shape-start: var(--md-filled-field-container-shape-start-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));
+  --field-container-shape-end: var(--md-filled-field-container-shape-start-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));
+  --field-leading-space: var(--md-filled-field-leading-space, 16px);
+  --field-trailing-space: var(--md-filled-field-trailing-space, 16px);
+  --field-top-space: var(--md-filled-field-top-space, 16px);
+  --field-bottom-space: var(--md-filled-field-bottom-space, 16px);
+  --field-focus-indicator-color: var(--md-filled-field-focus-active-indicator-color, var(--md-sys-color-primary, #6750a4));
+  --field-focus-indicator-height: var(--md-filled-field-focus-active-indicator-height, 3px);
+  --field-active-indicator-color: var(--md-filled-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #49454f));
+  --field-active-indicator-height: var(--md-filled-field-active-indicator-height, 1px);
+  --field-hover-state-layer-color: var(--md-filled-field-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));
+  --field-hover-state-layer-opacity: var(--md-filled-field-hover-state-layer-opacity, 0.08);
+  --field-content-color: var(--md-filled-field-content-color, var(--md-sys-color-on-surface, #1d1b20));
+  --field-content-font: var(--md-filled-field-content-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));
+  --field-content-size: var(--md-filled-field-content-size, var(--md-sys-typescale-body-large-size, 1rem));
+  --field-content-line-height: var(--md-filled-field-content-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));
+  --field-content-weight: var(--md-filled-field-content-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));
+  --field-label-color: var(--md-filled-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));
+  --field-label-font: var(--md-filled-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));
+  --field-supporting-text-color: var(--md-filled-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));
+  --field-supporting-text-font: var(--md-filled-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));
+  --field-supporting-text-size: var(--md-filled-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));
+  --field-supporting-text-leading-space: var(--md-filled-field-supporting-text-leading-space, 16px);
+  --field-supporting-text-top-space: var(--md-filled-field-supporting-text-top-space, 4px);
+  --field-error-color: var(--md-filled-field-error-content-color, var(--md-sys-color-error, #b3261e));
+  --field-error-hover-color: var(--md-filled-field-error-hover-content-color, var(--md-sys-color-on-error-container, #410e0b));
+  --field-disabled-content-color: var(--md-filled-field-disabled-content-color, var(--md-sys-color-on-surface, #1d1b20));
+  --field-disabled-content-opacity: var(--md-filled-field-disabled-content-opacity, 0.38);
+  --field-disabled-container-color: var(--md-filled-field-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));
+  --field-disabled-container-opacity: var(--md-filled-field-disabled-container-opacity, 0.04);
+  --field-disabled-active-indicator-color: var(--md-filled-field-disabled-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));
+  --field-disabled-active-indicator-opacity: var(--md-filled-field-disabled-active-indicator-opacity, 0.38);
+
+  display: inline-flex;
+  resize: inherit;
+}
+
+.containerOverflow {
+  border-radius: var(--field-container-shape-start) var(--field-container-shape-end) 0 0;
+  display: flex;
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  max-height: 100%;
+  min-height: 100%;
+  min-width: min-content;
+  position: relative;
+}
+
+/* Background - Filled variant */
+.background {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  background: var(--field-container-color);
+  border-radius: inherit;
+}
+
+/* State layer - Filled variant */
+.stateLayer {
+  border-radius: inherit;
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  opacity: 0;
+  background: var(--field-hover-state-layer-color);
+  transition: opacity 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.field:hover:not(.disabled) .stateLayer {
+  opacity: var(--field-hover-state-layer-opacity);
+}
+
+/* Active indicator - Filled variant */
+.activeIndicator {
+  inset: auto 0 0;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: var(--field-active-indicator-height);
+  background: var(--field-active-indicator-color);
+  transition: opacity 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.activeIndicator::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--field-focus-indicator-height);
+  background: var(--field-focus-indicator-color);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.focused .activeIndicator::after {
+  transform: scaleX(1);
+}
+
+.error .activeIndicator {
+  background: var(--field-error-color);
+}
+
+.error .activeIndicator::after {
+  background: var(--field-error-color);
+}
+
+/* Outlined variant */
+.outlined {
+  --field-container-color: transparent;
+  --field-container-shape-start: var(--md-outlined-field-container-shape-start-start, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));
+  --field-container-shape-end: var(--md-outlined-field-container-shape-end-end, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));
+  --field-outline-color: var(--md-outlined-field-outline-color, var(--md-sys-color-outline, #79747e));
+  --field-outline-width: var(--md-outlined-field-outline-width, 1px);
+  --field-focus-outline-color: var(--md-outlined-field-focus-outline-color, var(--md-sys-color-primary, #6750a4));
+  --field-focus-outline-width: var(--md-outlined-field-focus-outline-width, 3px);
+  --field-hover-outline-color: var(--md-outlined-field-hover-outline-color, var(--md-sys-color-on-surface, #1d1b20));
+  --field-disabled-outline-color: var(--md-outlined-field-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));
+  --field-disabled-outline-opacity: var(--md-outlined-field-disabled-outline-opacity, 0.12);
+}
+
+.outlined .containerOverflow {
+  border-radius: var(--field-container-shape-start) var(--field-container-shape-end)
+    var(--md-outlined-field-container-shape-end-end, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)))
+    var(--md-outlined-field-container-shape-end-start, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));
+}
+
+/* Outline */
+.outline {
+  display: flex;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.outlineStart,
+.outlineEnd {
+  border: var(--field-outline-width) solid var(--field-outline-color);
+  border-radius: inherit;
+  transition: border-color 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.outlineStart {
+  border-radius: inherit;
+  border-end-end-radius: 0;
+  border-start-end-radius: 0;
+  border-inline-end: none;
+  padding-inline-start: var(--field-leading-space);
+}
+
+.outlineEnd {
+  border-radius: inherit;
+  border-end-start-radius: 0;
+  border-start-start-radius: 0;
+  border-inline-start: none;
+  flex-grow: 1;
+}
+
+.outlineNotch {
+  align-items: flex-start;
+  display: flex;
+  padding: 0 4px;
+  position: relative;
+  border-top: var(--field-outline-width) solid var(--field-outline-color);
+  border-bottom: var(--field-outline-width) solid var(--field-outline-color);
+  transition: border-color 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.outlinePanelInactive,
+.outlinePanelActive {
+  position: absolute;
+  inset: 0;
+  border-top: var(--field-outline-width) solid var(--field-outline-color);
+}
+
+.outlinePanelActive {
+  border-top-width: var(--field-focus-outline-width);
+  border-top-color: var(--field-focus-outline-color);
+  opacity: 0;
+  transition: opacity 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.outlinePanelInactive {
+  opacity: 1;
+}
+
+.focused .outlinePanelActive {
+  opacity: 1;
+}
+
+.focused .outlinePanelInactive,
+.focused.populated .outlinePanelInactive,
+.populated .outlinePanelInactive {
+  opacity: 0;
+}
+
+.populated .outlinePanelActive {
+  opacity: 1;
+  border-top-color: transparent;
+}
+
+.focused .outlinePanelActive,
+.focused.populated .outlinePanelActive {
+  border-top-color: var(--field-focus-outline-color);
+}
+
+.focused.populated .outlinePanelActive {
+  opacity: 0;
+}
+
+.focused .outlineNotch {
+  border-top-color: transparent;
+}
+
+.populated:not(.focused) .outlineNotch {
+  border-top-color: transparent;
+}
+
+.outlineLabel {
+  display: flex;
+  transform: translateY(calc(-100% - var(--field-outline-width)));
+  max-width: 100%;
+}
+
+/* Hover states for outline */
+.outlined:hover:not(.disabled):not(.focused) .outlineStart,
+.outlined:hover:not(.disabled):not(.focused) .outlineEnd,
+.outlined:hover:not(.disabled):not(.focused) .outlineNotch,
+.outlined:hover:not(.disabled):not(.focused) .outlinePanelInactive {
+  border-color: var(--field-hover-outline-color);
+}
+
+/* Focus states for outline */
+.outlined.focused .outlineStart,
+.outlined.focused .outlineEnd {
+  border-color: var(--field-focus-outline-color);
+  border-width: var(--field-focus-outline-width);
+}
+
+.outlined.focused .outlineNotch {
+  border-bottom-color: var(--field-focus-outline-color);
+  border-bottom-width: var(--field-focus-outline-width);
+}
+
+/* Error states for outline */
+.outlined.error .outlineStart,
+.outlined.error .outlineEnd,
+.outlined.error .outlineNotch {
+  border-color: var(--field-error-color);
+}
+
+.outlined.error .outlinePanelActive {
+  border-top-color: var(--field-error-color);
+}
+
+.outlined.error.focused .outlineStart,
+.outlined.error.focused .outlineEnd,
+.outlined.error.focused .outlineNotch {
+  border-color: var(--field-error-color);
+}
+
+/* Slots */
+.slot {
+  display: flex;
+  align-items: center;
+  color: var(--field-label-color);
+}
+
+.leading {
+  padding-inline-start: var(--field-leading-space);
+}
+
+.trailing {
+  padding-inline-end: var(--field-trailing-space);
+}
+
+/* Middle content */
+.middle {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  padding-inline-start: var(--field-leading-space);
+  padding-inline-end: var(--field-trailing-space);
+  min-height: 56px;
+}
+
+.withStart .middle {
+  padding-inline-start: 0;
+  margin-inline-start: 16px;
+}
+
+.withEnd .middle {
+  padding-inline-end: 0;
+  margin-inline-end: 16px;
+}
+
+.filled .middle {
+  padding-top: var(--field-top-space);
+  padding-bottom: var(--field-bottom-space);
+}
+
+.filled:not(.noLabel) .middle {
+  padding-top: calc(var(--field-top-space) + 8px);
+  padding-bottom: calc(var(--field-bottom-space) - 8px);
+}
+
+.outlined .middle {
+  padding-top: var(--field-top-space);
+  padding-bottom: var(--field-bottom-space);
+}
+
+/* Content area */
+.content {
+  display: flex;
+  flex: 1;
+  color: var(--field-content-color);
+  font-family: var(--field-content-font);
+  font-size: var(--field-content-size);
+  line-height: var(--field-content-line-height);
+  font-weight: var(--field-content-weight);
+  width: 100%;
+}
+
+/* Label */
+.labelWrapper {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--field-label-color);
+  font-family: var(--field-label-font);
+  font-size: var(--field-content-size);
+  line-height: var(--field-content-line-height);
+  font-weight: var(--field-content-weight);
+  transition:
+    transform 150ms cubic-bezier(0.2, 0, 0, 1),
+    font-size 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.resting {
+  transform: translateY(0);
+  font-size: var(--field-content-size);
+}
+
+.floating {
+  transform: translateY(-50%);
+  font-size: var(--md-sys-typescale-body-small-size, 0.75rem);
+}
+
+.focused .label {
+  color: var(--field-focus-indicator-color);
+}
+
+.error .label {
+  color: var(--field-error-color);
+}
+
+.outlined .label.floating {
+  transform: none;
+  font-size: var(--md-sys-typescale-body-small-size, 0.75rem);
+}
+
+/* Supporting text */
+.supportingText {
+  color: var(--field-supporting-text-color);
+  font-family: var(--field-supporting-text-font);
+  font-size: var(--field-supporting-text-size);
+  padding-inline-start: var(--field-supporting-text-leading-space);
+  padding-top: var(--field-supporting-text-top-space);
+}
+
+.supportingTextError {
+  color: var(--field-error-color);
+}
+
+/* Disabled states */
+.disabled {
+  pointer-events: none;
+}
+
+.disabled .background {
+  background: var(--field-disabled-container-color);
+  opacity: var(--field-disabled-container-opacity);
+}
+
+.disabled .content {
+  color: var(--field-disabled-content-color);
+  opacity: var(--field-disabled-content-opacity);
+}
+
+.disabled .label {
+  color: var(--field-disabled-content-color);
+  opacity: var(--field-disabled-content-opacity);
+}
+
+.disabled .activeIndicator {
+  background: var(--field-disabled-active-indicator-color);
+  opacity: var(--field-disabled-active-indicator-opacity);
+}
+
+.disabled.outlined .outlineStart,
+.disabled.outlined .outlineEnd,
+.disabled.outlined .outlineNotch {
+  border-color: var(--field-disabled-outline-color);
+  opacity: var(--field-disabled-outline-opacity);
+}
+
+/* No label adjustments */
+.noLabel.filled .middle {
+  padding-top: var(--field-top-space);
+  padding-bottom: var(--field-bottom-space);
+}
+
+/* Dark theme overrides */
+@media (prefers-color-scheme: dark) {
+  .field {
+    --field-container-color: var(--md-filled-field-container-color, var(--md-sys-color-surface-container-highest, #36343b));
+    --field-active-indicator-color: var(--md-filled-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #cac4d0));
+    --field-focus-indicator-color: var(--md-filled-field-focus-active-indicator-color, var(--md-sys-color-primary, #d0bcff));
+    --field-hover-state-layer-color: var(--md-filled-field-hover-state-layer-color, var(--md-sys-color-on-surface, #e6e1e5));
+    --field-content-color: var(--md-filled-field-content-color, var(--md-sys-color-on-surface, #e6e1e5));
+    --field-label-color: var(--md-filled-field-label-text-color, var(--md-sys-color-on-surface-variant, #cac4d0));
+    --field-supporting-text-color: var(--md-filled-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #cac4d0));
+    --field-error-color: var(--md-filled-field-error-content-color, var(--md-sys-color-error, #f2b8b5));
+  }
+
+  .outlined {
+    --field-outline-color: var(--md-outlined-field-outline-color, var(--md-sys-color-outline, #938f99));
+    --field-hover-outline-color: var(--md-outlined-field-hover-outline-color, var(--md-sys-color-on-surface, #e6e1e5));
+    --field-focus-outline-color: var(--md-outlined-field-focus-outline-color, var(--md-sys-color-primary, #d0bcff));
+  }
+}

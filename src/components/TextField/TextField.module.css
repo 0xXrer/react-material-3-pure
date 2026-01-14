@@ -1,0 +1,562 @@
+/**
+ * Material Design 3 TextField Styles
+ *
+ * Supports filled and outlined variants with floating labels.
+ */
+
+/* ==========================================================================
+   CSS VARIABLES (M3 Tokens)
+   ========================================================================== */
+
+.textField {
+  /* Filled field tokens */
+  --_filled-container-color: var(--md-sys-color-surface-container-highest, #e6e0e9);
+  --_filled-container-shape: var(--md-sys-shape-corner-extra-small-top, 4px 4px 0 0);
+  
+  /* Outlined field tokens */
+  --_outlined-outline-color: var(--md-sys-color-outline, #79747e);
+  --_outlined-container-shape: var(--md-sys-shape-corner-extra-small, 4px);
+  
+  /* Shared tokens */
+  --_label-text-color: var(--md-sys-color-on-surface-variant, #49454f);
+  --_label-text-font: var(--md-sys-typescale-body-large-font, Roboto, sans-serif);
+  --_label-text-size: var(--md-sys-typescale-body-large-size, 1rem);
+  --_label-text-populated-size: var(--md-sys-typescale-body-small-size, 0.75rem);
+  
+  --_input-text-color: var(--md-sys-color-on-surface, #1d1b20);
+  --_input-text-font: var(--md-sys-typescale-body-large-font, Roboto, sans-serif);
+  --_input-text-size: var(--md-sys-typescale-body-large-size, 1rem);
+  
+  --_supporting-text-color: var(--md-sys-color-on-surface-variant, #49454f);
+  --_error-color: var(--md-sys-color-error, #b3261e);
+  --_error-hover-color: var(--md-sys-color-on-error-container, #410e0b);
+  
+  --_focus-color: var(--md-sys-color-primary, #6750a4);
+  --_hover-state-layer-color: var(--md-sys-color-on-surface, #1d1b20);
+  --_hover-state-layer-opacity: 0.08;
+  
+  --_leading-space: 16px;
+  --_trailing-space: 16px;
+  --_top-space: 16px;
+  --_bottom-space: 16px;
+  --_content-space: 16px;
+  
+  --_icon-size: 24px;
+  --_icon-color: var(--md-sys-color-on-surface-variant, #49454f);
+
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 210px;
+}
+
+/* ==========================================================================
+   FIELD CONTAINER
+   ========================================================================== */
+
+.field {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-width: 100%;
+  cursor: text;
+}
+
+.field.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.containerOverflow {
+  border-radius: var(--_filled-container-shape);
+  display: flex;
+  height: 56px;
+  position: relative;
+}
+
+.container {
+  align-items: center;
+  border-radius: inherit;
+  display: flex;
+  flex: 1;
+  min-height: 100%;
+  position: relative;
+}
+
+/* ==========================================================================
+   FILLED VARIANT
+   ========================================================================== */
+
+.filled .containerOverflow {
+  border-radius: var(--_filled-container-shape);
+}
+
+.filled .background {
+  background: var(--_filled-container-color);
+  border-radius: inherit;
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.filled .stateLayer {
+  background: var(--_hover-state-layer-color);
+  border-radius: inherit;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.filled:hover .stateLayer {
+  opacity: var(--_hover-state-layer-opacity);
+}
+
+.filled .activeIndicator {
+  inset: auto 0 0 0;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.filled .activeIndicator::before {
+  border-bottom: 1px solid var(--_label-text-color);
+  content: '';
+  inset: auto 0 0 0;
+  position: absolute;
+  width: 100%;
+  transition: border-color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.filled .activeIndicator::after {
+  border-bottom: 2px solid var(--_focus-color);
+  content: '';
+  inset: auto 0 0 0;
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.filled.focused .activeIndicator::after {
+  transform: scaleX(1);
+}
+
+.filled:hover .activeIndicator::before {
+  border-bottom-color: var(--_input-text-color);
+}
+
+.filled.error .activeIndicator::before {
+  border-bottom-color: var(--_error-color);
+}
+
+.filled.error .activeIndicator::after {
+  border-bottom-color: var(--_error-color);
+}
+
+.filled.disabled .background {
+  background: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 4%, transparent);
+}
+
+.filled.disabled .activeIndicator::before {
+  border-bottom-color: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 38%, transparent);
+}
+
+/* ==========================================================================
+   OUTLINED VARIANT
+   ========================================================================== */
+
+.outlined .containerOverflow {
+  border-radius: var(--_outlined-container-shape);
+}
+
+.outlined .outline {
+  border-color: var(--_outlined-outline-color);
+  border-radius: inherit;
+  display: flex;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.outlined .outlineStart,
+.outlined .outlineEnd {
+  border: 1px solid;
+  border-color: inherit;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.outlined .outlineStart {
+  border-radius: inherit;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  border-inline-end: none;
+  width: 12px;
+}
+
+.outlined .outlineEnd {
+  border-radius: inherit;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-inline-start: none;
+  flex-grow: 1;
+}
+
+.outlined .outlineNotch {
+  align-items: flex-start;
+  border: inherit;
+  display: flex;
+  margin-inline-start: -1px;
+  margin-inline-end: -1px;
+  max-width: calc(100% - 24px);
+  padding: 0 4px;
+  position: relative;
+}
+
+.outlined .outlinePanelInactive,
+.outlined .outlinePanelActive {
+  border-bottom: 1px solid;
+  border-color: inherit;
+  inset: 0;
+  position: absolute;
+}
+
+.outlined .outlinePanelInactive::before,
+.outlined .outlinePanelInactive::after,
+.outlined .outlinePanelActive::before,
+.outlined .outlinePanelActive::after {
+  border-top: 1px solid;
+  border-color: inherit;
+  bottom: auto;
+  content: '';
+  position: absolute;
+  top: 0;
+  transform: scaleX(1);
+  transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
+  width: 50%;
+}
+
+.outlined .outlinePanelInactive::before,
+.outlined .outlinePanelActive::before {
+  right: 50%;
+  transform-origin: top left;
+}
+
+.outlined .outlinePanelInactive::after,
+.outlined .outlinePanelActive::after {
+  left: 50%;
+  transform-origin: top right;
+}
+
+.outlined.populated .outlinePanelInactive::before,
+.outlined.populated .outlinePanelInactive::after,
+.outlined.focused .outlinePanelInactive::before,
+.outlined.focused .outlinePanelInactive::after {
+  transform: scaleX(0);
+}
+
+.outlined .outlinePanelActive {
+  border-width: 2px;
+  opacity: 0;
+  transition: opacity 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.outlined.focused .outlinePanelActive {
+  opacity: 1;
+}
+
+.outlined .outlineLabel {
+  display: flex;
+  max-width: 100%;
+  transform: translateY(calc(-50% - 0.5px));
+}
+
+.outlined.noLabel .outlineNotch {
+  display: none;
+}
+
+/* Outlined states */
+.outlined:hover .outline {
+  border-color: var(--_input-text-color);
+}
+
+.outlined.focused .outline {
+  border-color: var(--_focus-color);
+}
+
+.outlined.error .outline {
+  border-color: var(--_error-color);
+}
+
+.outlined.error:hover .outline {
+  border-color: var(--_error-hover-color);
+}
+
+.outlined.disabled .outline {
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 12%, transparent);
+}
+
+/* ==========================================================================
+   LABEL
+   ========================================================================== */
+
+.labelWrapper {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.label {
+  color: var(--_label-text-color);
+  font-family: var(--_label-text-font);
+  font-size: var(--_label-text-size);
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: 
+    transform 150ms cubic-bezier(0.2, 0, 0, 1),
+    font-size 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.label.resting {
+  position: absolute;
+  top: 50%;
+  left: var(--_leading-space);
+  transform: translateY(-50%);
+}
+
+.label.floating {
+  font-size: var(--_label-text-populated-size);
+}
+
+/* Filled floating label */
+.filled .label.floating {
+  position: absolute;
+  top: 8px;
+  left: var(--_leading-space);
+  transform: none;
+}
+
+.filled.withStart .label {
+  left: calc(var(--_leading-space) + var(--_icon-size) + var(--_content-space));
+}
+
+/* Outlined label - hidden when floating (shown in notch instead) */
+.outlined .label.floating {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.outlined .label.resting {
+  position: absolute;
+  top: 50%;
+  left: var(--_leading-space);
+  transform: translateY(-50%);
+}
+
+.outlined.withStart .label {
+  left: calc(var(--_leading-space) + var(--_icon-size) + var(--_content-space));
+}
+
+/* Focus/error label colors */
+.focused .label {
+  color: var(--_focus-color);
+}
+
+.error .label {
+  color: var(--_error-color);
+}
+
+.disabled .label {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 38%, transparent);
+}
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+.middle {
+  align-items: stretch;
+  align-self: baseline;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+}
+
+.content {
+  color: var(--_input-text-color);
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.inputWrapper {
+  display: flex;
+  flex: 1;
+}
+
+.input {
+  appearance: none;
+  background: transparent;
+  border: none;
+  caret-color: var(--_focus-color);
+  color: inherit;
+  font-family: var(--_input-text-font);
+  font-size: var(--_input-text-size);
+  line-height: 1.5;
+  outline: none;
+  padding: 0;
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--_label-text-color);
+  opacity: 1;
+}
+
+/* Input padding based on label */
+.filled:not(.noLabel) .input {
+  padding-top: 24px;
+  padding-bottom: 8px;
+}
+
+.filled.noLabel .input,
+.outlined .input {
+  padding-top: var(--_top-space);
+  padding-bottom: var(--_bottom-space);
+  color: var(--_input-text-color);
+}
+
+.outlined .content {
+  color: var(--_input-text-color);
+}
+
+.field:not(.withStart) .input {
+  padding-inline-start: var(--_leading-space);
+}
+
+.field:not(.withEnd) .input {
+  padding-inline-end: var(--_trailing-space);
+}
+
+.field.withStart .input {
+  padding-inline-start: var(--_content-space);
+}
+
+.field.withEnd .input {
+  padding-inline-end: var(--_content-space);
+}
+
+/* Textarea */
+.input:is(textarea) {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Error caret */
+.error .input {
+  caret-color: var(--_error-color);
+}
+
+/* Disabled input */
+.disabled .input {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 38%, transparent);
+}
+
+/* Prefix/Suffix */
+.prefix,
+.suffix {
+  color: var(--_label-text-color);
+  font-family: var(--_input-text-font);
+  font-size: var(--_input-text-size);
+  white-space: nowrap;
+}
+
+.prefix {
+  padding-inline-end: 2px;
+}
+
+.suffix {
+  padding-inline-start: 2px;
+}
+
+/* ==========================================================================
+   ICONS
+   ========================================================================== */
+
+.icon {
+  align-items: center;
+  color: var(--_icon-color);
+  display: flex;
+  fill: currentColor;
+  height: var(--_icon-size);
+  justify-content: center;
+  width: var(--_icon-size);
+}
+
+.icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.icon.leading {
+  margin-inline-start: 12px;
+}
+
+.icon.trailing {
+  margin-inline-end: 12px;
+}
+
+.error .icon.trailing {
+  color: var(--_error-color);
+}
+
+/* ==========================================================================
+   SUPPORTING TEXT
+   ========================================================================== */
+
+.supportingText {
+  color: var(--_supporting-text-color);
+  font-family: var(--md-sys-typescale-body-small-font, Roboto, sans-serif);
+  font-size: var(--md-sys-typescale-body-small-size, 0.75rem);
+  line-height: var(--md-sys-typescale-body-small-line-height, 1rem);
+  padding: 4px 16px 0;
+}
+
+.supportingTextError {
+  color: var(--_error-color);
+}
+
+/* ==========================================================================
+   DARK THEME
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .textField {
+    --_filled-container-color: var(--md-sys-color-surface-container-highest, #36343b);
+    --_outlined-outline-color: var(--md-sys-color-outline, #938f99);
+    --_label-text-color: var(--md-sys-color-on-surface-variant, #cac4d0);
+    --_input-text-color: var(--md-sys-color-on-surface, #e6e1e5);
+    --_supporting-text-color: var(--md-sys-color-on-surface-variant, #cac4d0);
+    --_focus-color: var(--md-sys-color-primary, #d0bcff);
+    --_error-color: var(--md-sys-color-error, #f2b8b5);
+    --_icon-color: var(--md-sys-color-on-surface-variant, #cac4d0);
+  }
+}
+
+[data-theme="dark"] .textField {
+  --_filled-container-color: var(--md-sys-color-surface-container-highest, #36343b);
+  --_outlined-outline-color: var(--md-sys-color-outline, #938f99);
+  --_label-text-color: var(--md-sys-color-on-surface-variant, #cac4d0);
+  --_input-text-color: var(--md-sys-color-on-surface, #e6e1e5);
+  --_supporting-text-color: var(--md-sys-color-on-surface-variant, #cac4d0);
+  --_focus-color: var(--md-sys-color-primary, #d0bcff);
+  --_error-color: var(--md-sys-color-error, #f2b8b5);
+  --_icon-color: var(--md-sys-color-on-surface-variant, #cac4d0);
+}

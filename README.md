@@ -173,6 +173,89 @@ import { Divider } from 'react-material-3-pure';
 <Divider insetEnd />
 ```
 
+### TextField
+
+M3 text input with filled and outlined variants.
+
+```tsx
+import { TextField } from 'react-material-3-pure';
+
+// Variants
+<TextField label="Email" />                           // Filled (default)
+<TextField variant="outlined" label="Email" />        // Outlined
+
+// Types
+<TextField label="Password" type="password" />
+<TextField label="Email" type="email" />
+<TextField label="Phone" type="tel" />
+
+// With icons
+<TextField label="Search" leadingIcon={<SearchIcon />} />
+<TextField label="Password" trailingIcon={<VisibilityIcon />} />
+
+// With prefix/suffix
+<TextField label="Price" prefixText="$" />
+<TextField label="Weight" suffixText="kg" />
+
+// Supporting text
+<TextField label="Username" supportingText="Enter your username" />
+
+// Error state
+<TextField label="Email" error errorText="Invalid email address" />
+
+// Textarea mode
+<TextField label="Message" type="textarea" rows={4} />
+
+// Disabled
+<TextField label="Disabled" disabled />
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'filled' \| 'outlined'` | `'filled'` | Visual style |
+| `type` | `'text' \| 'email' \| 'password' \| 'number' \| 'search' \| 'tel' \| 'url' \| 'textarea'` | `'text'` | Input type |
+| `label` | `string` | — | Floating label |
+| `supportingText` | `string` | — | Helper text below field |
+| `error` | `boolean` | `false` | Error state |
+| `errorText` | `string` | — | Error message (replaces supportingText) |
+| `prefixText` | `string` | — | Text before input |
+| `suffixText` | `string` | — | Text after input |
+| `leadingIcon` | `ReactNode` | — | Icon before input |
+| `trailingIcon` | `ReactNode` | — | Icon after input |
+| `rows` | `number` | `2` | Rows for textarea |
+| `disabled` | `boolean` | `false` | Disable the field |
+
+### Field
+
+Low-level container for building custom form fields.
+
+```tsx
+import { Field } from 'react-material-3-pure';
+
+// Used internally by TextField, Select, etc.
+<Field
+  variant="filled"
+  label="Custom Input"
+  focused={isFocused}
+  populated={hasValue}
+  supportingText="Helper text"
+>
+  <input type="text" />
+</Field>
+
+// With icons
+<Field
+  variant="outlined"
+  label="Search"
+  leadingContent={<SearchIcon />}
+  trailingContent={<ClearIcon />}
+>
+  <input type="text" />
+</Field>
+```
+
 ### ThemeProvider
 
 Theme context for light/dark mode.
@@ -235,6 +318,8 @@ src/
 │   ├── Chip/
 │   ├── Dialog/
 │   ├── Divider/
+│   ├── Field/
+│   ├── TextField/
 │   └── ThemeProvider/
 ├── hooks/
 │   └── useRipple.ts
