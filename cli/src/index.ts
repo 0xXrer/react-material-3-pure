@@ -1,19 +1,4 @@
 #!/usr/bin/env node
-/**
- * M3 Pure CLI
- *
- * A CLI tool for adding Material Design 3 components to your React project.
- * Similar to shadcn/ui, this CLI allows you to add individual components
- * with all their dependencies directly to your codebase.
- *
- * Usage:
- *   npx m3-pure init           # Initialize m3-pure in your project
- *   npx m3-pure add button     # Add the Button component
- *   npx m3-pure add --all      # Add all components
- *   npx m3-pure list           # List available components
- *
- * @see https://github.com/material-components/material-web
- */
 
 import { Command } from 'commander';
 import chalk from 'chalk';
@@ -28,7 +13,6 @@ const __dirname = path.dirname(__filename);
 
 const VERSION = '0.1.0';
 
-// Component registry
 interface ComponentDefinition {
   name: string;
   description: string;
@@ -46,8 +30,8 @@ const COMPONENTS_REGISTRY: Record<string, ComponentDefinition> = {
     name: 'Button',
     description: 'M3 Common Button with 5 variants (filled, outlined, text, elevated, tonal)',
     files: [
-      { source: 'components/Button/Button.tsx', target: 'components/ui/button.tsx' },
-      { source: 'components/Button/Button.module.css', target: 'components/ui/button.module.css' },
+      { source: 'components/Button/Button.tsx', target: 'button.tsx' },
+      { source: 'components/Button/Button.module.css', target: 'button.module.css' },
     ],
     dependencies: [],
     hooks: ['useRipple'],
@@ -57,8 +41,8 @@ const COMPONENTS_REGISTRY: Record<string, ComponentDefinition> = {
     name: 'Checkbox',
     description: 'M3 Checkbox with checked, unchecked, and indeterminate states',
     files: [
-      { source: 'components/Checkbox/Checkbox.tsx', target: 'components/ui/checkbox.tsx' },
-      { source: 'components/Checkbox/Checkbox.module.css', target: 'components/ui/checkbox.module.css' },
+      { source: 'components/Checkbox/Checkbox.tsx', target: 'checkbox.tsx' },
+      { source: 'components/Checkbox/Checkbox.module.css', target: 'checkbox.module.css' },
     ],
     dependencies: [],
     hooks: ['useRipple'],
@@ -68,8 +52,8 @@ const COMPONENTS_REGISTRY: Record<string, ComponentDefinition> = {
     name: 'Chip',
     description: 'M3 Chips (AssistChip, FilterChip, InputChip, SuggestionChip, ChipSet)',
     files: [
-      { source: 'components/Chip/Chip.tsx', target: 'components/ui/chip.tsx' },
-      { source: 'components/Chip/Chip.module.css', target: 'components/ui/chip.module.css' },
+      { source: 'components/Chip/Chip.tsx', target: 'chip.tsx' },
+      { source: 'components/Chip/Chip.module.css', target: 'chip.module.css' },
     ],
     dependencies: [],
     hooks: ['useRipple'],
@@ -79,8 +63,8 @@ const COMPONENTS_REGISTRY: Record<string, ComponentDefinition> = {
     name: 'Dialog',
     description: 'M3 Dialog with modal behavior, focus trapping, and animations',
     files: [
-      { source: 'components/Dialog/Dialog.tsx', target: 'components/ui/dialog.tsx' },
-      { source: 'components/Dialog/Dialog.module.css', target: 'components/ui/dialog.module.css' },
+      { source: 'components/Dialog/Dialog.tsx', target: 'dialog.tsx' },
+      { source: 'components/Dialog/Dialog.module.css', target: 'dialog.module.css' },
     ],
     dependencies: [],
     hooks: [],
@@ -90,8 +74,8 @@ const COMPONENTS_REGISTRY: Record<string, ComponentDefinition> = {
     name: 'Divider',
     description: 'M3 Divider with inset variants for lists and containers',
     files: [
-      { source: 'components/Divider/Divider.tsx', target: 'components/ui/divider.tsx' },
-      { source: 'components/Divider/Divider.module.css', target: 'components/ui/divider.module.css' },
+      { source: 'components/Divider/Divider.tsx', target: 'divider.tsx' },
+      { source: 'components/Divider/Divider.module.css', target: 'divider.module.css' },
     ],
     dependencies: [],
     hooks: [],
@@ -102,18 +86,18 @@ const COMPONENTS_REGISTRY: Record<string, ComponentDefinition> = {
 const HOOKS_REGISTRY: Record<string, { source: string; target: string }> = {
   useRipple: {
     source: 'hooks/useRipple.ts',
-    target: 'hooks/use-ripple.ts',
+    target: 'use-ripple.ts',
   },
 };
 
 const STYLES_REGISTRY: Record<string, { source: string; target: string }> = {
   theme: {
     source: 'styles/theme.css',
-    target: 'styles/m3-theme.css',
+    target: 'm3-theme.css',
   },
   global: {
     source: 'styles/global.css',
-    target: 'styles/m3-global.css',
+    target: 'm3-global.css',
   },
 };
 
@@ -135,7 +119,6 @@ const DEFAULT_CONFIG: M3Config = {
   cssModules: true,
 };
 
-// Helper functions
 function getConfigPath(): string {
   return path.join(process.cwd(), 'm3-pure.json');
 }
@@ -154,9 +137,8 @@ async function saveConfig(config: M3Config): Promise<void> {
 }
 
 function getSourcePath(relativePath: string): string {
-  // In development, use the local src folder
-  // In production, would fetch from registry
-  return path.join(__dirname, '..', 'src', relativePath);
+  const rootDir = path.join(__dirname, '..', '..');
+  return path.join(rootDir, 'src', relativePath);
 }
 
 async function copyComponent(
@@ -169,7 +151,6 @@ async function copyComponent(
   
   let content = await fs.readFile(sourcePath, 'utf-8');
   
-  // Transform imports if needed
   if (config.aliases) {
     for (const [alias, replacement] of Object.entries(config.aliases)) {
       content = content.replace(new RegExp(alias, 'g'), replacement);
@@ -179,7 +160,6 @@ async function copyComponent(
   await fs.writeFile(absoluteTarget, content);
 }
 
-// CLI Commands
 const program = new Command();
 
 program
@@ -187,7 +167,6 @@ program
   .description('Add Material Design 3 components to your React project')
   .version(VERSION);
 
-// Init command
 program
   .command('init')
   .description('Initialize m3-pure in your project')
@@ -254,15 +233,12 @@ program
         spinner.start();
       }
 
-      // Create directories
       await fs.ensureDir(path.join(process.cwd(), config.componentsDir));
       await fs.ensureDir(path.join(process.cwd(), config.hooksDir));
       await fs.ensureDir(path.join(process.cwd(), config.stylesDir));
 
-      // Save config
       await saveConfig(config);
 
-      // Copy base styles
       const themeSource = getSourcePath('styles/theme.css');
       const themeTarget = path.join(process.cwd(), config.stylesDir, 'm3-theme.css');
       if (await fs.pathExists(themeSource)) {
@@ -285,7 +261,6 @@ program
     }
   });
 
-// Add command
 program
   .command('add [components...]')
   .description('Add components to your project')
@@ -337,24 +312,29 @@ program
 
         spinner.text = `Adding ${component.name}...`;
 
-        // Copy component files
         for (const file of component.files) {
           const sourcePath = getSourcePath(file.source);
-          const targetPath = path.join(config.componentsDir, path.basename(file.target));
+          const targetPath = path.join(config.componentsDir, file.target);
+
+          console.log('DEBUG SOURCE:', sourcePath);
+          console.log('DEBUG EXISTS:', await fs.pathExists(sourcePath));
+          console.log('DEBUG TARGET:', targetPath);
 
           if (await fs.pathExists(sourcePath)) {
             const absoluteTarget = path.join(process.cwd(), targetPath);
             
             if ((await fs.pathExists(absoluteTarget)) && !options.overwrite) {
-              console.log(chalk.yellow(`\n  Skipping ${targetPath} (already exists)`));
+              console.log(chalk.yellow(`\n  Skipping ${file.target} (already exists)`));
               continue;
             }
 
             await copyComponent(sourcePath, targetPath, config);
+            console.log('DEBUG COPIED:', absoluteTarget);
+          } else {
+            console.log(chalk.red(`\n  Source not found: ${sourcePath}`));
           }
         }
 
-        // Copy required hooks
         if (component.hooks) {
           for (const hookName of component.hooks) {
             if (addedHooks.has(hookName)) continue;
@@ -362,7 +342,7 @@ program
             const hook = HOOKS_REGISTRY[hookName];
             if (hook) {
               const sourcePath = getSourcePath(hook.source);
-              const targetPath = path.join(config.hooksDir, path.basename(hook.target));
+              const targetPath = path.join(config.hooksDir, hook.target);
 
               if (await fs.pathExists(sourcePath)) {
                 await copyComponent(sourcePath, targetPath, config);
@@ -372,7 +352,6 @@ program
           }
         }
 
-        // Copy required styles
         if (component.styles) {
           for (const styleName of component.styles) {
             if (addedStyles.has(styleName)) continue;
@@ -380,7 +359,7 @@ program
             const style = STYLES_REGISTRY[styleName];
             if (style) {
               const sourcePath = getSourcePath(style.source);
-              const targetPath = path.join(config.stylesDir, path.basename(style.target));
+              const targetPath = path.join(config.stylesDir, style.target);
 
               if (await fs.pathExists(sourcePath)) {
                 await copyComponent(sourcePath, targetPath, config);
@@ -399,7 +378,7 @@ program
         const component = COMPONENTS_REGISTRY[componentName.toLowerCase()];
         if (component) {
           for (const file of component.files) {
-            console.log(chalk.dim(`  - ${path.join(config.componentsDir, path.basename(file.target))}`));
+            console.log(chalk.dim(`  - ${path.join(config.componentsDir, file.target)}`));
           }
         }
       }
@@ -410,7 +389,7 @@ program
         for (const hookName of addedHooks) {
           const hook = HOOKS_REGISTRY[hookName];
           if (hook) {
-            console.log(chalk.dim(`  - ${path.join(config.hooksDir, path.basename(hook.target))}`));
+            console.log(chalk.dim(`  - ${path.join(config.hooksDir, hook.target)}`));
           }
         }
       }
@@ -426,7 +405,6 @@ program
     }
   });
 
-// List command
 program
   .command('list')
   .description('List all available components')
@@ -444,7 +422,6 @@ program
     console.log('');
   });
 
-// Diff command
 program
   .command('diff [component]')
   .description('Show differences between local and registry components')
@@ -466,23 +443,23 @@ program
 
     for (const file of component.files) {
       const sourcePath = getSourcePath(file.source);
-      const targetPath = path.join(process.cwd(), config.componentsDir, path.basename(file.target));
+      const targetPath = path.join(process.cwd(), config.componentsDir, file.target);
 
       const sourceExists = await fs.pathExists(sourcePath);
       const targetExists = await fs.pathExists(targetPath);
 
       if (!targetExists) {
-        console.log(chalk.yellow(`  ⊘ ${path.basename(file.target)} - Not installed`));
+        console.log(chalk.yellow(`  ⊘ ${file.target} - Not installed`));
       } else if (!sourceExists) {
-        console.log(chalk.red(`  ✗ ${path.basename(file.target)} - Source not found`));
+        console.log(chalk.red(`  ✗ ${file.target} - Source not found`));
       } else {
         const sourceContent = await fs.readFile(sourcePath, 'utf-8');
         const targetContent = await fs.readFile(targetPath, 'utf-8');
 
         if (sourceContent === targetContent) {
-          console.log(chalk.green(`  ✓ ${path.basename(file.target)} - Up to date`));
+          console.log(chalk.green(`  ✓ ${file.target} - Up to date`));
         } else {
-          console.log(chalk.cyan(`  ≠ ${path.basename(file.target)} - Has local changes`));
+          console.log(chalk.cyan(`  ≠ ${file.target} - Has local changes`));
         }
       }
     }

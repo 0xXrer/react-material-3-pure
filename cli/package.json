@@ -6,10 +6,6 @@
   "bin": {
     "m3-pure": "./dist/index.js"
   },
-  "files": [
-    "dist",
-    "src"
-  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "dev": "tsup src/index.ts --format esm --watch",
@@ -46,5 +42,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/user/react-material-3-pure.git"
-  }
+  },
+  "files": [
+    "dist",
+    "src",
+    "../../src/components",
+    "../../src/hooks",
+    "../../src/styles"
+  ]
 }

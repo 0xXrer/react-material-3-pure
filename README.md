@@ -1,6 +1,11 @@
 https://github.com/user-attachments/assets/be7caf9d-938a-47d0-8ec8-53ea162e618a
 
-
+Usage cli:
+```
+npm i m3-pure
+m3-pure init
+m3-pure add
+```
 
 # React Material 3 Pure
 
