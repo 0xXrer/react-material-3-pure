@@ -18,7 +18,7 @@ const meta: Meta<typeof Switch> = {
 export default meta;
 type Story = StoryObj<typeof Switch>;
 
-function DefaultSwitch(args: typeof Switch.defaultProps) {
+function DefaultSwitch(args: Partial<React.ComponentProps<typeof Switch>>) {
   const [selected, setSelected] = useState(false);
   return (
     <Switch

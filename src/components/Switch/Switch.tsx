@@ -6,7 +6,6 @@ import {
   useRef,
   useImperativeHandle,
   useMemo,
-  useState,
   useId,
 } from 'react';
 import styles from './Switch.module.css';
