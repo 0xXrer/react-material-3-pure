@@ -22,15 +22,15 @@ createRoot(document.getElementById('root')!).render(
                 <Routes>
                     <Route element={<App />}>
                         <Route index element={<Home />} />
-                        <Route path="docs/button" element={<ButtonPage />} />
-                        <Route path="docs/checkbox" element={<CheckboxPage />} />
-                        <Route path="docs/chip" element={<ChipPage />} />
-                        <Route path="docs/dialog" element={<DialogPage />} />
-                        <Route path="docs/divider" element={<DividerPage />} />
-                        <Route path="docs/radio" element={<RadioPage />} />
-                        <Route path="docs/switch" element={<SwitchPage />} />
-                        <Route path="docs/textfield" element={<TextFieldPage />} />
-                        <Route path="docs/theme" element={<ThemePage />} />
+                        <Route path="/docs/button" element={<ButtonPage />} />
+                        <Route path="/docs/checkbox" element={<CheckboxPage />} />
+                        <Route path="/docs/chip" element={<ChipPage />} />
+                        <Route path="/docs/dialog" element={<DialogPage />} />
+                        <Route path="/docs/divider" element={<DividerPage />} />
+                        <Route path="/docs/radio" element={<RadioPage />} />
+                        <Route path="/docs/switch" element={<SwitchPage />} />
+                        <Route path="/docs/textfield" element={<TextFieldPage />} />
+                        <Route path="/docs/theme" element={<ThemePage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -9,6 +9,7 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
       '@m3': resolve(__dirname, '..', 'src'),
     },
+    dedupe: ['react', 'react-dom'],
   },
   css: {
     modules: {
