@@ -1,130 +1,247 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "m3-pure",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Material Design 3 components for React",
-  "repository": "https://github.com/material-components/material-web",
+  "repository": "https://github.com/user/react-material-3-pure",
   "components": {
     "button": {
       "name": "Button",
-      "description": "M3 Common Button with 5 variants (filled, outlined, text, elevated, tonal)",
-      "version": "0.1.0",
+      "description": "M3 Common Button — filled, outlined, text, elevated, tonal variants",
       "files": [
         {
-          "name": "button.tsx",
           "path": "components/Button/Button.tsx",
+          "target": "Button/Button.tsx",
           "type": "component"
         },
         {
-          "name": "button.module.css",
           "path": "components/Button/Button.module.css",
+          "target": "Button/Button.module.css",
           "type": "style"
+        },
+        {
+          "path": "components/Button/index.ts",
+          "target": "Button/index.ts",
+          "type": "barrel"
         }
       ],
-      "dependencies": [],
-      "hooks": ["useRipple"],
-      "styles": ["theme"],
-      "docs": "https://m3.material.io/components/buttons",
-      "source": "https://github.com/material-components/material-web/tree/main/button"
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
     },
     "checkbox": {
       "name": "Checkbox",
-      "description": "M3 Checkbox with checked, unchecked, and indeterminate states",
-      "version": "0.1.0",
+      "description": "M3 Checkbox — checked, unchecked, indeterminate states with animations",
       "files": [
         {
-          "name": "checkbox.tsx",
           "path": "components/Checkbox/Checkbox.tsx",
+          "target": "Checkbox/Checkbox.tsx",
           "type": "component"
         },
         {
-          "name": "checkbox.module.css",
           "path": "components/Checkbox/Checkbox.module.css",
+          "target": "Checkbox/Checkbox.module.css",
           "type": "style"
+        },
+        {
+          "path": "components/Checkbox/index.ts",
+          "target": "Checkbox/index.ts",
+          "type": "barrel"
         }
       ],
-      "dependencies": [],
-      "hooks": ["useRipple"],
-      "styles": ["theme"],
-      "docs": "https://m3.material.io/components/checkbox",
-      "source": "https://github.com/material-components/material-web/tree/main/checkbox"
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
     },
     "chip": {
       "name": "Chip",
-      "description": "M3 Chips with 4 variants (AssistChip, FilterChip, InputChip, SuggestionChip) and ChipSet container",
-      "version": "0.1.0",
+      "description": "M3 Chips — Assist, Filter, Input, Suggestion variants + ChipSet",
       "files": [
         {
-          "name": "chip.tsx",
           "path": "components/Chip/Chip.tsx",
+          "target": "Chip/Chip.tsx",
           "type": "component"
         },
         {
-          "name": "chip.module.css",
           "path": "components/Chip/Chip.module.css",
+          "target": "Chip/Chip.module.css",
           "type": "style"
+        },
+        {
+          "path": "components/Chip/index.ts",
+          "target": "Chip/index.ts",
+          "type": "barrel"
         }
       ],
-      "dependencies": [],
-      "hooks": ["useRipple"],
-      "styles": ["theme"],
-      "docs": "https://m3.material.io/components/chips",
-      "source": "https://github.com/material-components/material-web/tree/main/chips"
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
     },
     "dialog": {
       "name": "Dialog",
-      "description": "M3 Dialog with modal behavior, focus trapping, and open/close animations",
-      "version": "0.1.0",
+      "description": "M3 Dialog — modal, focus trapping, animated open/close transitions",
       "files": [
         {
-          "name": "dialog.tsx",
           "path": "components/Dialog/Dialog.tsx",
+          "target": "Dialog/Dialog.tsx",
           "type": "component"
         },
         {
-          "name": "dialog.module.css",
           "path": "components/Dialog/Dialog.module.css",
+          "target": "Dialog/Dialog.module.css",
           "type": "style"
+        },
+        {
+          "path": "components/Dialog/index.ts",
+          "target": "Dialog/index.ts",
+          "type": "barrel"
         }
       ],
-      "dependencies": [],
       "hooks": [],
-      "styles": ["theme"],
-      "docs": "https://m3.material.io/components/dialogs",
-      "source": "https://github.com/material-components/material-web/tree/main/dialog"
+      "styles": [
+        "theme"
+      ]
     },
     "divider": {
       "name": "Divider",
-      "description": "M3 Divider with inset variants for lists and containers",
-      "version": "0.1.0",
+      "description": "M3 Divider — full-width and inset variants for lists/containers",
       "files": [
         {
-          "name": "divider.tsx",
           "path": "components/Divider/Divider.tsx",
+          "target": "Divider/Divider.tsx",
           "type": "component"
         },
         {
-          "name": "divider.module.css",
           "path": "components/Divider/Divider.module.css",
+          "target": "Divider/Divider.module.css",
           "type": "style"
+        },
+        {
+          "path": "components/Divider/index.ts",
+          "target": "Divider/index.ts",
+          "type": "barrel"
         }
       ],
-      "dependencies": [],
       "hooks": [],
-      "styles": ["theme"],
-      "docs": "https://m3.material.io/components/divider",
-      "source": "https://github.com/material-components/material-web/tree/main/divider"
+      "styles": [
+        "theme"
+      ]
+    },
+    "radio": {
+      "name": "Radio",
+      "description": "M3 Radio — single selection with ripple and focus ring",
+      "files": [
+        {
+          "path": "components/Radio/Radio.tsx",
+          "target": "Radio/Radio.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Radio/Radio.module.css",
+          "target": "Radio/Radio.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Radio/index.ts",
+          "target": "Radio/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "switch": {
+      "name": "Switch",
+      "description": "M3 Switch — toggle with track, handle, and optional icons",
+      "files": [
+        {
+          "path": "components/Switch/Switch.tsx",
+          "target": "Switch/Switch.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Switch/Switch.module.css",
+          "target": "Switch/Switch.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Switch/index.ts",
+          "target": "Switch/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "textfield": {
+      "name": "TextField",
+      "description": "M3 TextField — filled and outlined with floating label, icons, validation",
+      "files": [
+        {
+          "path": "components/TextField/TextField.tsx",
+          "target": "TextField/TextField.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/TextField/TextField.module.css",
+          "target": "TextField/TextField.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/TextField/index.ts",
+          "target": "TextField/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [],
+      "styles": [
+        "theme"
+      ]
+    },
+    "theme-provider": {
+      "name": "ThemeProvider",
+      "description": "M3 ThemeProvider — light/dark/system mode, color schemes, persistence",
+      "files": [
+        {
+          "path": "components/ThemeProvider/ThemeProvider.tsx",
+          "target": "ThemeProvider/ThemeProvider.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/ThemeProvider/index.ts",
+          "target": "ThemeProvider/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [],
+      "styles": []
     }
   },
   "hooks": {
     "useRipple": {
       "name": "useRipple",
-      "description": "Hook for managing ripple effect state and animations",
-      "version": "0.1.0",
+      "description": "M3 ripple effect — state layer + Web Animations API",
       "files": [
         {
-          "name": "use-ripple.ts",
           "path": "hooks/useRipple.ts",
+          "target": "useRipple.ts",
           "type": "hook"
         }
       ]
@@ -133,83 +250,25 @@
   "styles": {
     "theme": {
       "name": "M3 Theme",
-      "description": "Material Design 3 design tokens and CSS custom properties",
-      "version": "0.1.0",
+      "description": "Design tokens — colors, elevation, shape, typography",
       "files": [
         {
-          "name": "m3-theme.css",
           "path": "styles/theme.css",
+          "target": "theme.css",
           "type": "style"
         }
       ]
     },
     "global": {
-      "name": "Global Styles",
-      "description": "Global CSS reset and base styles",
-      "version": "0.1.0",
+      "name": "Global Reset",
+      "description": "CSS reset and base styles",
       "files": [
         {
-          "name": "m3-global.css",
           "path": "styles/global.css",
+          "target": "global.css",
           "type": "style"
         }
       ]
-    }
-  },
-  "tokens": {
-    "colors": {
-      "primary": "#6750a4",
-      "onPrimary": "#ffffff",
-      "primaryContainer": "#eaddff",
-      "onPrimaryContainer": "#21005d",
-      "secondary": "#625b71",
-      "onSecondary": "#ffffff",
-      "secondaryContainer": "#e8def8",
-      "onSecondaryContainer": "#1d192b",
-      "tertiary": "#7d5260",
-      "onTertiary": "#ffffff",
-      "tertiaryContainer": "#ffd8e4",
-      "onTertiaryContainer": "#31111d",
-      "error": "#b3261e",
-      "onError": "#ffffff",
-      "errorContainer": "#f9dedc",
-      "onErrorContainer": "#410e0b",
-      "surface": "#fef7ff",
-      "onSurface": "#1d1b20",
-      "surfaceVariant": "#e7e0ec",
-      "onSurfaceVariant": "#49454f",
-      "outline": "#79747e",
-      "outlineVariant": "#cac4d0",
-      "shadow": "#000000",
-      "scrim": "#000000",
-      "inverseSurface": "#322f35",
-      "inverseOnSurface": "#f5eff7",
-      "inversePrimary": "#d0bcff"
-    },
-    "elevation": {
-      "level0": "none",
-      "level1": "0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15)",
-      "level2": "0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
-      "level3": "0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15)",
-      "level4": "0px 2px 3px 0px rgba(0, 0, 0, 0.3), 0px 6px 10px 4px rgba(0, 0, 0, 0.15)",
-      "level5": "0px 4px 4px 0px rgba(0, 0, 0, 0.3), 0px 8px 12px 6px rgba(0, 0, 0, 0.15)"
-    },
-    "shape": {
-      "cornerNone": "0px",
-      "cornerExtraSmall": "4px",
-      "cornerSmall": "8px",
-      "cornerMedium": "12px",
-      "cornerLarge": "16px",
-      "cornerExtraLarge": "28px",
-      "cornerFull": "9999px"
-    },
-    "state": {
-      "hoverOpacity": "0.08",
-      "focusOpacity": "0.1",
-      "pressedOpacity": "0.1",
-      "draggedOpacity": "0.16",
-      "disabledOpacity": "0.38",
-      "disabledContainerOpacity": "0.12"
     }
   }
 }

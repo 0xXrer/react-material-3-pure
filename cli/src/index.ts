@@ -8,50 +8,14 @@ import fs from 'fs-extra';
 import path from 'path';
 
 import {
-  COMPONENT_TEMPLATES,
-  HOOK_TEMPLATES,
-  STYLE_TEMPLATES,
-} from './templates/index.js';
+  COMPONENTS,
+  HOOKS,
+  STYLES,
+  REGISTRY_VERSION,
+  type RegistryComponent,
+} from './generated/registry.js';
 
-const VERSION = '0.2.0';
-
-interface ComponentDefinition {
-  name: string;
-  description: string;
-  files: {
-    name: string;
-    type: 'tsx' | 'css';
-  }[];
-  dependencies: string[];
-  hooks?: string[];
-  styles?: string[];
-}
-
-const COMPONENTS_REGISTRY: Record<string, ComponentDefinition> = {
-  button: {
-    name: 'Button',
-    description: 'M3 Common Button with 5 variants (filled, outlined, text, elevated, tonal)',
-    files: [
-      { name: 'button.tsx', type: 'tsx' },
-      { name: 'button.module.css', type: 'css' },
-    ],
-    dependencies: [],
-    hooks: ['useRipple'],
-    styles: ['theme'],
-  },
-};
-
-const HOOKS_REGISTRY: Record<string, { target: string }> = {
-  useRipple: {
-    target: 'use-ripple.ts',
-  },
-};
-
-const STYLES_REGISTRY: Record<string, { target: string }> = {
-  theme: {
-    target: 'm3-theme.css',
-  },
-};
+const VERSION = '0.3.0';
 
 interface M3Config {
   $schema?: string;
@@ -60,7 +24,7 @@ interface M3Config {
   stylesDir: string;
   typescript: boolean;
   cssModules: boolean;
-  aliases?: Record<string, string>;
+  installed?: Record<string, string>;
 }
 
 const DEFAULT_CONFIG: M3Config = {
@@ -71,47 +35,68 @@ const DEFAULT_CONFIG: M3Config = {
   cssModules: true,
 };
 
-function getConfigPath(): string {
-  return path.join(process.cwd(), 'm3-pure.json');
+function getConfigPath(cwd: string): string {
+  return path.join(cwd, 'm3-pure.json');
 }
 
-async function loadConfig(): Promise<M3Config | null> {
-  const configPath = getConfigPath();
-  if (await fs.pathExists(configPath)) {
-    return fs.readJson(configPath);
-  }
+async function loadConfig(cwd: string): Promise<M3Config | null> {
+  const p = getConfigPath(cwd);
+  if (await fs.pathExists(p)) return fs.readJson(p);
   return null;
 }
 
-async function saveConfig(config: M3Config): Promise<void> {
-  const configPath = getConfigPath();
-  await fs.writeJson(configPath, config, { spaces: 2 });
+async function saveConfig(cwd: string, config: M3Config): Promise<void> {
+  await fs.writeJson(getConfigPath(cwd), config, { spaces: 2 });
 }
 
-async function writeTemplate(targetPath: string, content: string): Promise<void> {
-  const absoluteTarget = path.join(process.cwd(), targetPath);
-  await fs.ensureDir(path.dirname(absoluteTarget));
-  await fs.writeFile(absoluteTarget, content);
+async function writeFile(cwd: string, targetPath: string, content: string): Promise<void> {
+  const abs = path.join(cwd, targetPath);
+  await fs.ensureDir(path.dirname(abs));
+  await fs.writeFile(abs, content);
+}
+
+async function fileExists(cwd: string, targetPath: string): Promise<boolean> {
+  return fs.pathExists(path.join(cwd, targetPath));
+}
+
+async function readInstalledFile(cwd: string, targetPath: string): Promise<string | null> {
+  const abs = path.join(cwd, targetPath);
+  if (await fs.pathExists(abs)) return fs.readFile(abs, 'utf-8');
+  return null;
+}
+
+function rewriteImports(content: string, config: M3Config): string {
+  const hooksRelative = path.posix.relative(
+    path.posix.normalize(config.componentsDir),
+    path.posix.normalize(config.hooksDir)
+  );
+
+  return content.replace(
+    /from\s+['"]\.\.\/hooks\/useRipple['"]/g,
+    `from '${hooksRelative}/useRipple'`
+  );
 }
 
 const program = new Command();
 
 program
   .name('m3-pure')
-  .description('Add Material Design 3 components to your React project')
+  .description(chalk.bold('Material Design 3 components for React'))
   .version(VERSION);
 
+// ─── INIT ─────────────────────────────────────────────
 program
   .command('init')
   .description('Initialize m3-pure in your project')
-  .option('-y, --yes', 'Skip prompts and use defaults')
+  .option('-y, --yes', 'Skip prompts, use defaults')
   .option('-c, --cwd <path>', 'Working directory', process.cwd())
   .action(async (options) => {
-    const spinner = ora('Initializing m3-pure...').start();
+    const cwd = path.resolve(options.cwd);
+    const spinner = ora('Initializing...').start();
 
     try {
-      const existingConfig = await loadConfig();
-      if (existingConfig && !options.yes) {
+      const existing = await loadConfig(cwd);
+      if (existing && !options.yes) {
         spinner.stop();
         const { overwrite } = await prompts({
           type: 'confirm',
@@ -126,220 +111,428 @@ program
         spinner.start();
       }
 
-      let config = DEFAULT_CONFIG;
+      let config = { ...DEFAULT_CONFIG };
 
       if (!options.yes) {
         spinner.stop();
-        const responses = await prompts([
+        const r = await prompts([
           {
             type: 'text',
             name: 'componentsDir',
-            message: 'Where would you like to store components?',
+            message: 'Components directory?',
             initial: DEFAULT_CONFIG.componentsDir,
           },
           {
             type: 'text',
             name: 'hooksDir',
-            message: 'Where would you like to store hooks?',
+            message: 'Hooks directory?',
             initial: DEFAULT_CONFIG.hooksDir,
           },
           {
             type: 'text',
             name: 'stylesDir',
-            message: 'Where would you like to store styles?',
+            message: 'Styles directory?',
             initial: DEFAULT_CONFIG.stylesDir,
           },
-          {
-            type: 'confirm',
-            name: 'typescript',
-            message: 'Are you using TypeScript?',
-            initial: true,
-          },
-          {
-            type: 'confirm',
-            name: 'cssModules',
-            message: 'Are you using CSS Modules?',
-            initial: true,
-          },
         ]);
-
-        config = { ...DEFAULT_CONFIG, ...responses };
+        config = { ...config, ...r };
         spinner.start();
       }
 
-      await fs.ensureDir(path.join(process.cwd(), config.componentsDir));
-      await fs.ensureDir(path.join(process.cwd(), config.hooksDir));
-      await fs.ensureDir(path.join(process.cwd(), config.stylesDir));
+      await fs.ensureDir(path.join(cwd, config.componentsDir));
+      await fs.ensureDir(path.join(cwd, config.hooksDir));
+      await fs.ensureDir(path.join(cwd, config.stylesDir));
 
-      await saveConfig(config);
+      config.installed = {};
+      await saveConfig(cwd, config);
 
-      const themeTarget = path.join(config.stylesDir, 'm3-theme.css');
-      await writeTemplate(themeTarget, STYLE_TEMPLATES.theme.css);
+      const theme = STYLES['theme'];
+      if (theme) {
+        for (const f of theme.files) {
+          await writeFile(cwd, path.join(config.stylesDir, f.target), f.content);
+        }
+      }
 
-      spinner.succeed(chalk.green('m3-pure initialized successfully!'));
+      const global = STYLES['global'];
+      if (global) {
+        for (const f of global.files) {
+          await writeFile(cwd, path.join(config.stylesDir, f.target), f.content);
+        }
+      }
+
+      spinner.succeed(chalk.green('m3-pure initialized!'));
       console.log('');
-      console.log('Next steps:');
-      console.log(chalk.cyan('  1. Import the theme CSS in your app:'));
-      console.log(chalk.dim(`     import '${config.stylesDir}/m3-theme.css'`));
-      console.log('');
-      console.log(chalk.cyan('  2. Add a component:'));
+      console.log(chalk.dim('  Next steps:'));
+      console.log(`  ${chalk.cyan('1.')} Import the theme in your app:`);
+      console.log(chalk.dim(`     import '${config.stylesDir}/theme.css'`));
+      console.log(`  ${chalk.cyan('2.')} Add a component:`);
       console.log(chalk.dim('     npx m3-pure add button'));
       console.log('');
-    } catch (error) {
-      spinner.fail(chalk.red('Failed to initialize m3-pure'));
-      console.error(error);
+    } catch (err) {
+      spinner.fail(chalk.red('Init failed'));
+      console.error(err);
       process.exit(1);
     }
   });
 
+// ─── ADD ──────────────────────────────────────────────
 program
   .command('add [components...]')
   .description('Add components to your project')
-  .option('-a, --all', 'Add all available components')
+  .option('-a, --all', 'Add all components')
   .option('-o, --overwrite', 'Overwrite existing files')
+  .option('--dry-run', 'Show what would be added without writing')
   .option('-c, --cwd <path>', 'Working directory', process.cwd())
   .action(async (components: string[], options) => {
-    const spinner = ora('Loading configuration...').start();
+    const cwd = path.resolve(options.cwd);
+    const spinner = ora('Loading config...').start();
 
     try {
-      const config = await loadConfig();
+      const config = await loadConfig(cwd);
       if (!config) {
         spinner.fail(chalk.red('No m3-pure.json found. Run `npx m3-pure init` first.'));
         process.exit(1);
       }
 
-      let componentsToAdd = components;
+      let toAdd = components.map((c) => c.toLowerCase());
 
       if (options.all) {
-        componentsToAdd = Object.keys(COMPONENTS_REGISTRY);
+        toAdd = Object.keys(COMPONENTS);
       }
 
-      if (componentsToAdd.length === 0) {
+      if (toAdd.length === 0) {
         spinner.stop();
         const { selected } = await prompts({
           type: 'multiselect',
           name: 'selected',
-          message: 'Which components would you like to add?',
-          choices: Object.entries(COMPONENTS_REGISTRY).map(([key, value]) => ({
-            title: value.name,
+          message: 'Which components?',
+          choices: Object.entries(COMPONENTS).map(([key, val]) => ({
+            title: val.name,
             value: key,
-            description: value.description,
+            description: val.description,
           })),
           min: 1,
         });
-        componentsToAdd = selected;
+        if (!selected || selected.length === 0) {
+          console.log(chalk.yellow('Nothing selected.'));
+          process.exit(0);
+        }
+        toAdd = selected;
         spinner.start();
       }
 
+      const written: string[] = [];
+      const skipped: string[] = [];
       const addedHooks = new Set<string>();
       const addedStyles = new Set<string>();
 
-      for (const componentName of componentsToAdd) {
-        const component = COMPONENTS_REGISTRY[componentName.toLowerCase()];
-        if (!component) {
-          console.log(chalk.yellow(`\n  Unknown component: ${componentName}`));
+      if (!config.installed) config.installed = {};
+
+      for (const name of toAdd) {
+        const comp = COMPONENTS[name];
+        if (!comp) {
+          spinner.warn(chalk.yellow(`Unknown component: ${name}`));
+          spinner.start();
           continue;
         }
 
-        spinner.text = `Adding ${component.name}...`;
+        spinner.text = `Adding ${comp.name}...`;
 
-        const template = COMPONENT_TEMPLATES[componentName.toLowerCase()];
-        if (!template) {
-          console.log(chalk.yellow(`\n  No template for: ${componentName}`));
-          continue;
-        }
+        for (const file of comp.files) {
+          const target = path.join(config.componentsDir, file.target);
 
-        for (const file of component.files) {
-          const targetPath = path.join(config.componentsDir, file.name);
-          const absoluteTarget = path.join(process.cwd(), targetPath);
-
-          if ((await fs.pathExists(absoluteTarget)) && !options.overwrite) {
-            console.log(chalk.yellow(`\n  Skipping ${file.name} (already exists)`));
+          if (await fileExists(cwd, target) && !options.overwrite) {
+            skipped.push(target);
             continue;
           }
 
-          const content = file.type === 'tsx' ? template.tsx : template.css;
-          await writeTemplate(targetPath, content);
+          let content = file.content;
+          if (file.type === 'component') {
+            content = rewriteImports(content, config);
+          }
+
+          if (!options.dryRun) {
+            await writeFile(cwd, target, content);
+          }
+          written.push(target);
         }
 
-        if (component.hooks) {
-          for (const hookName of component.hooks) {
-            if (addedHooks.has(hookName)) continue;
+        for (const hookName of comp.hooks) {
+          if (addedHooks.has(hookName)) continue;
+          const hook = HOOKS[hookName];
+          if (!hook) continue;
 
-            const hookDef = HOOKS_REGISTRY[hookName];
-            const hookTemplate = HOOK_TEMPLATES[hookName];
-            if (hookDef && hookTemplate) {
-              const targetPath = path.join(config.hooksDir, hookDef.target);
-              await writeTemplate(targetPath, hookTemplate.code);
-              addedHooks.add(hookName);
+          for (const f of hook.files) {
+            const target = path.join(config.hooksDir, f.target);
+            if (await fileExists(cwd, target) && !options.overwrite) {
+              skipped.push(target);
+            } else {
+              if (!options.dryRun) {
+                await writeFile(cwd, target, f.content);
+              }
+              written.push(target);
             }
           }
+          addedHooks.add(hookName);
         }
 
-        if (component.styles) {
-          for (const styleName of component.styles) {
-            if (addedStyles.has(styleName)) continue;
+        for (const styleName of comp.styles) {
+          if (addedStyles.has(styleName)) continue;
+          const style = STYLES[styleName];
+          if (!style) continue;
 
-            const styleDef = STYLES_REGISTRY[styleName];
-            const styleTemplate = STYLE_TEMPLATES[styleName];
-            if (styleDef && styleTemplate) {
-              const targetPath = path.join(config.stylesDir, styleDef.target);
-              await writeTemplate(targetPath, styleTemplate.css);
-              addedStyles.add(styleName);
+          for (const f of style.files) {
+            const target = path.join(config.stylesDir, f.target);
+            if (await fileExists(cwd, target) && !options.overwrite) {
+              skipped.push(target);
+            } else {
+              if (!options.dryRun) {
+                await writeFile(cwd, target, f.content);
+              }
+              written.push(target);
             }
           }
+          addedStyles.add(styleName);
         }
+
+        config.installed[name] = REGISTRY_VERSION;
       }
 
-      spinner.succeed(chalk.green(`Added ${componentsToAdd.length} component(s)`));
-
-      console.log('');
-      console.log('Added files:');
-      for (const componentName of componentsToAdd) {
-        const component = COMPONENTS_REGISTRY[componentName.toLowerCase()];
-        if (component) {
-          for (const file of component.files) {
-            console.log(chalk.dim(`  - ${path.join(config.componentsDir, file.name)}`));
-          }
-        }
+      if (!options.dryRun) {
+        await saveConfig(cwd, config);
       }
 
-      if (addedHooks.size > 0) {
+      const prefix = options.dryRun ? chalk.blue('[dry-run] ') : '';
+
+      if (written.length > 0) {
+        spinner.succeed(`${prefix}${chalk.green(`Added ${toAdd.length} component(s)`)}`);
         console.log('');
-        console.log('Added hooks:');
-        for (const hookName of addedHooks) {
-          const hook = HOOKS_REGISTRY[hookName];
-          if (hook) {
-            console.log(chalk.dim(`  - ${path.join(config.hooksDir, hook.target)}`));
-          }
+        for (const f of written) {
+          console.log(`  ${chalk.green('+')} ${chalk.dim(f)}`);
+        }
+      } else {
+        spinner.info(`${prefix}No new files to write`);
+      }
+
+      if (skipped.length > 0) {
+        console.log('');
+        console.log(chalk.dim('  Skipped (already exist):'));
+        for (const f of skipped) {
+          console.log(`  ${chalk.yellow('~')} ${chalk.dim(f)}`);
         }
       }
 
       console.log('');
-      console.log(chalk.cyan('Usage example:'));
-      console.log(chalk.dim(`  import { Button } from '@/components/ui/button'`));
-      console.log('');
-    } catch (error) {
+    } catch (err) {
       spinner.fail(chalk.red('Failed to add components'));
-      console.error(error);
+      console.error(err);
       process.exit(1);
     }
   });
 
+// ─── LIST ─────────────────────────────────────────────
 program
   .command('list')
   .description('List all available components')
-  .action(() => {
+  .option('-c, --cwd <path>', 'Working directory', process.cwd())
+  .action(async (options) => {
+    const cwd = path.resolve(options.cwd);
+    const config = await loadConfig(cwd);
+    const installed = config?.installed || {};
+
     console.log('');
-    console.log(chalk.bold('Available M3 Pure Components:'));
+    console.log(chalk.bold('  M3 Pure Components'));
+    console.log(chalk.dim(`  Registry v${REGISTRY_VERSION}`));
     console.log('');
 
-    for (const [key, component] of Object.entries(COMPONENTS_REGISTRY)) {
-      console.log(`  ${chalk.cyan(key.padEnd(15))} ${component.description}`);
+    const maxLen = Math.max(...Object.values(COMPONENTS).map((c) => c.name.length));
+
+    for (const [key, comp] of Object.entries(COMPONENTS)) {
+      const isInstalled = key in installed;
+      const status = isInstalled ? chalk.green('✓') : chalk.dim('○');
+      const name = comp.name.padEnd(maxLen + 2);
+      const deps = comp.hooks.length > 0 ? chalk.dim(` [${comp.hooks.join(', ')}]`) : '';
+      console.log(`  ${status} ${chalk.cyan(name)}${comp.description}${deps}`);
     }
 
     console.log('');
-    console.log(chalk.dim('Add a component with: npx m3-pure add <component>'));
+    console.log(chalk.dim('  npx m3-pure add <component>'));
+    console.log('');
+  });
+
+// ─── DIFF ─────────────────────────────────────────────
+program
+  .command('diff [component]')
+  .description('Show differences between installed and registry versions')
+  .option('-c, --cwd <path>', 'Working directory', process.cwd())
+  .action(async (component: string | undefined, options) => {
+    const cwd = path.resolve(options.cwd);
+    const config = await loadConfig(cwd);
+    if (!config) {
+      console.log(chalk.red('No m3-pure.json found. Run `npx m3-pure init` first.'));
+      process.exit(1);
+    }
+
+    const targets = component
+      ? [component.toLowerCase()]
+      : Object.keys(config.installed || {});
+
+    if (targets.length === 0) {
+      console.log(chalk.dim('  No components installed.'));
+      return;
+    }
+
+    console.log('');
+    let totalDiffs = 0;
+
+    for (const name of targets) {
+      const comp = COMPONENTS[name];
+      if (!comp) continue;
+
+      for (const file of comp.files) {
+        const target = path.join(config.componentsDir, file.target);
+        const localContent = await readInstalledFile(cwd, target);
+
+        if (!localContent) {
+          console.log(`  ${chalk.red('✗')} ${chalk.dim(target)} ${chalk.red('missing')}`);
+          totalDiffs++;
+          continue;
+        }
+
+        let registryContent = file.content;
+        if (file.type === 'component') {
+          registryContent = rewriteImports(registryContent, config);
+        }
+
+        const localNorm = localContent.replace(/\r\n/g, '\n').trim();
+        const regNorm = registryContent.replace(/\r\n/g, '\n').trim();
+
+        if (localNorm !== regNorm) {
+          console.log(`  ${chalk.yellow('~')} ${chalk.dim(target)} ${chalk.yellow('modified')}`);
+          totalDiffs++;
+        } else {
+          console.log(`  ${chalk.green('✓')} ${chalk.dim(target)}`);
+        }
+      }
+    }
+
+    console.log('');
+    if (totalDiffs === 0) {
+      console.log(chalk.green('  All files match registry. No local modifications.'));
+    } else {
+      console.log(chalk.yellow(`  ${totalDiffs} file(s) differ. Use --overwrite to reset.`));
+    }
+    console.log('');
+  });
+
+// ─── DOCTOR ───────────────────────────────────────────
+program
+  .command('doctor')
+  .description('Check project health')
+  .option('-c, --cwd <path>', 'Working directory', process.cwd())
+  .action(async (options) => {
+    const cwd = path.resolve(options.cwd);
+    let issues = 0;
+
+    console.log('');
+    console.log(chalk.bold('  M3 Pure Doctor'));
+    console.log('');
+
+    const config = await loadConfig(cwd);
+    if (!config) {
+      console.log(`  ${chalk.red('✗')} No m3-pure.json found`);
+      console.log(chalk.dim('    Run `npx m3-pure init` to set up.'));
+      process.exit(1);
+    }
+    console.log(`  ${chalk.green('✓')} Config loaded`);
+
+    const compDir = path.join(cwd, config.componentsDir);
+    if (await fs.pathExists(compDir)) {
+      console.log(`  ${chalk.green('✓')} Components dir exists`);
+    } else {
+      console.log(`  ${chalk.red('✗')} Components dir missing: ${config.componentsDir}`);
+      issues++;
+    }
+
+    const hooksDir = path.join(cwd, config.hooksDir);
+    if (await fs.pathExists(hooksDir)) {
+      console.log(`  ${chalk.green('✓')} Hooks dir exists`);
+    } else {
+      console.log(`  ${chalk.red('✗')} Hooks dir missing: ${config.hooksDir}`);
+      issues++;
+    }
+
+    const stylesDir = path.join(cwd, config.stylesDir);
+    if (await fs.pathExists(stylesDir)) {
+      console.log(`  ${chalk.green('✓')} Styles dir exists`);
+    } else {
+      console.log(`  ${chalk.red('✗')} Styles dir missing: ${config.stylesDir}`);
+      issues++;
+    }
+
+    const installed = config.installed || {};
+    const neededHooks = new Set<string>();
+    const neededStyles = new Set<string>();
+
+    for (const name of Object.keys(installed)) {
+      const comp = COMPONENTS[name];
+      if (!comp) {
+        console.log(`  ${chalk.yellow('~')} Installed unknown component: ${name}`);
+        issues++;
+        continue;
+      }
+
+      let allPresent = true;
+      for (const file of comp.files) {
+        const target = path.join(config.componentsDir, file.target);
+        if (!(await fileExists(cwd, target))) {
+          console.log(`  ${chalk.red('✗')} Missing file: ${target}`);
+          issues++;
+          allPresent = false;
+        }
+      }
+      if (allPresent) {
+        console.log(`  ${chalk.green('✓')} ${comp.name} files present`);
+      }
+
+      comp.hooks.forEach((h) => neededHooks.add(h));
+      comp.styles.forEach((s) => neededStyles.add(s));
+    }
+
+    for (const hookName of neededHooks) {
+      const hook = HOOKS[hookName];
+      if (!hook) continue;
+      for (const f of hook.files) {
+        const target = path.join(config.hooksDir, f.target);
+        if (await fileExists(cwd, target)) {
+          console.log(`  ${chalk.green('✓')} Hook ${hookName} present`);
+        } else {
+          console.log(`  ${chalk.red('✗')} Missing hook: ${target}`);
+          issues++;
+        }
+      }
+    }
+
+    for (const styleName of neededStyles) {
+      const style = STYLES[styleName];
+      if (!style) continue;
+      for (const f of style.files) {
+        const target = path.join(config.stylesDir, f.target);
+        if (await fileExists(cwd, target)) {
+          console.log(`  ${chalk.green('✓')} Style ${styleName} present`);
+        } else {
+          console.log(`  ${chalk.red('✗')} Missing style: ${target}`);
+          issues++;
+        }
+      }
+    }
+
+    console.log('');
+    if (issues === 0) {
+      console.log(chalk.green('  ✓ Everything looks good!'));
+    } else {
+      console.log(chalk.red(`  ${issues} issue(s) found.`));
+    }
     console.log('');
   });
 
