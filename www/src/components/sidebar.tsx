@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '@m3/components/ThemeProvider';
+import logoSvg from '../assets/logo.svg';
 
 const DISCORD_DISMISSED_KEY = 'm3-discord-dismissed';
 
@@ -76,20 +77,11 @@ export function Sidebar() {
                         alignItems: 'center',
                         gap: 10,
                     }}>
-                        <div style={{
+                        <img src={logoSvg} alt="M3 Pure" style={{
                             width: 32,
                             height: 32,
                             borderRadius: 'var(--md-sys-shape-corner-medium)',
-                            background: 'var(--md-sys-color-primary)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'var(--md-sys-color-on-primary)',
-                            fontWeight: 700,
-                            fontSize: 14,
-                        }}>
-                            M3
-                        </div>
+                        }} />
                         <div>
                             <div style={{
                                 fontWeight: 500,
