@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Dialog } from '@m3/components/Dialog';
 import type { DialogRef } from '@m3/components/Dialog';
 import { Button } from '@m3/components/Button';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function DialogPage() {
     const [open, setOpen] = useState(false);
@@ -18,7 +18,7 @@ export function DialogPage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add dialog" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add dialog" />
 
             <div className="section">
                 <h2 className="section-title">Basic Dialog</h2>
@@ -44,8 +44,7 @@ export function DialogPage() {
                         Click outside or press Escape to close.
                     </p>
                 </Dialog>
-                <CodeBlock code={`import { Dialog } from '@/components/ui/Dialog';
-import { Button } from '@/components/ui/Button';
+                <CodeBlock code={`import { Dialog, Button } from 'react-material-3-pure'
 
 const [open, setOpen] = useState(false);
 

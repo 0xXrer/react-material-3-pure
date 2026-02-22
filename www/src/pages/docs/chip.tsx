@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AssistChip, FilterChip, InputChip, SuggestionChip, ChipSet } from '@m3/components/Chip';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function ChipPage() {
     const [filters, setFilters] = useState<Record<string, boolean>>({
@@ -19,7 +19,7 @@ export function ChipPage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add chip" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add chip" />
 
             <div className="section">
                 <h2 className="section-title">Assist Chip</h2>
@@ -30,7 +30,7 @@ export function ChipPage() {
                         <AssistChip label="Elevated" elevated />
                     </ChipSet>
                 </div>
-                <CodeBlock code={`import { AssistChip, ChipSet } from '@/components/ui/Chip';
+                <CodeBlock code={`import { AssistChip, ChipSet } from 'react-material-3-pure'
 
 <ChipSet>
   <AssistChip label="Share" />

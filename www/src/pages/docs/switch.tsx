@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Switch } from '@m3/components/Switch';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function SwitchPage() {
     const [s1, setS1] = useState(false);
@@ -17,7 +17,7 @@ export function SwitchPage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add switch" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add switch" />
 
             <div className="section">
                 <h2 className="section-title">Basic</h2>
@@ -31,7 +31,7 @@ export function SwitchPage() {
                         <Switch selected={s2} onChange={() => setS2(!s2)} />
                     </label>
                 </div>
-                <CodeBlock code={`import { Switch } from '@/components/ui/Switch';
+                <CodeBlock code={`import { Switch } from 'react-material-3-pure'
 
 const [selected, setSelected] = useState(false);
 

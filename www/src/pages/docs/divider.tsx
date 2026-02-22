@@ -1,5 +1,5 @@
 import { Divider } from '@m3/components/Divider';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function DividerPage() {
     return (
@@ -11,7 +11,7 @@ export function DividerPage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add divider" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add divider" />
 
             <div className="section">
                 <h2 className="section-title">Full Width</h2>
@@ -20,7 +20,7 @@ export function DividerPage() {
                     <Divider />
                     <div style={{ color: 'var(--md-sys-color-on-surface)', marginTop: 12 }}>Content below</div>
                 </div>
-                <CodeBlock code={`import { Divider } from '@/components/ui/Divider';
+                <CodeBlock code={`import { Divider } from 'react-material-3-pure'
 
 <Divider />`} />
             </div>

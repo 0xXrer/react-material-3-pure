@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@m3/components/Button';
+import { InstallBlock } from '@/components/code-block';
 
 const COMPONENTS = [
     { to: '/docs/button', name: 'Button', desc: 'Filled, outlined, text, elevated, tonal' },
@@ -63,19 +64,7 @@ export function Home() {
                     </Button>
                 </div>
 
-                <div style={{
-                    background: 'var(--md-sys-color-surface-container)',
-                    borderRadius: 'var(--md-sys-shape-corner-medium)',
-                    padding: '14px 20px',
-                    fontFamily: "'Google Sans Mono', monospace",
-                    fontSize: 14,
-                    color: 'var(--md-sys-color-on-surface)',
-                    border: '1px solid var(--md-sys-color-outline-variant)',
-                    display: 'inline-block',
-                    marginBottom: 60,
-                }}>
-                    <span style={{ color: 'var(--md-sys-color-primary)' }}>npx</span> m3-pure init
-                </div>
+                <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure init" />
             </div>
 
             <h2 style={{

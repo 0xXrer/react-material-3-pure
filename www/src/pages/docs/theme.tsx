@@ -1,7 +1,7 @@
 import { useTheme } from '@m3/components/ThemeProvider';
 import type { ThemeMode, ColorScheme } from '@m3/components/ThemeProvider';
 import { Button } from '@m3/components/Button';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 const SCHEMES: ColorScheme[] = ['default', 'teal', 'blue', 'green', 'orange', 'pink'];
 
@@ -27,7 +27,7 @@ export function ThemePage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add theme-provider" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add theme-provider" />
 
             <div className="section">
                 <h2 className="section-title">Theme Mode</h2>
@@ -48,7 +48,7 @@ export function ThemePage() {
                         ))}
                     </div>
                 </div>
-                <CodeBlock code={`import { ThemeProvider, useTheme } from '@/components/ui/ThemeProvider';
+                <CodeBlock code={`import { ThemeProvider, useTheme } from 'react-material-3-pure'
 
 // Wrap your app
 <ThemeProvider defaultMode="system">

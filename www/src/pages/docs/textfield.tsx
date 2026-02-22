@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { TextField } from '@m3/components/TextField';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function TextFieldPage() {
     const [value, setValue] = useState('');
@@ -15,7 +15,7 @@ export function TextFieldPage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add textfield" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add textfield" />
 
             <div className="section">
                 <h2 className="section-title">Variants</h2>
@@ -23,7 +23,7 @@ export function TextFieldPage() {
                     <TextField label="Filled" variant="filled" style={{ width: 280 }} />
                     <TextField label="Outlined" variant="outlined" style={{ width: 280 }} />
                 </div>
-                <CodeBlock code={`import { TextField } from '@/components/ui/TextField';
+                <CodeBlock code={`import { TextField } from 'react-material-3-pure'
 
 <TextField label="Filled" variant="filled" />
 <TextField label="Outlined" variant="outlined" />`} />

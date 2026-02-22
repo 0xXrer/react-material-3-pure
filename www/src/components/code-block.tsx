@@ -103,3 +103,89 @@ export function InstallCmd({ cmd }: InstallCmdProps) {
         </div>
     );
 }
+
+interface InstallBlockProps {
+    npm: string;
+    cli: string;
+}
+
+export function InstallBlock({ npm, cli }: InstallBlockProps) {
+    const [tab, setTab] = useState<'npm' | 'cli'>('npm');
+    const cmd = tab === 'npm' ? npm : cli;
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = useCallback(() => {
+        navigator.clipboard.writeText(cmd);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    }, [cmd]);
+
+    return (
+        <div style={{ marginBottom: 24 }}>
+            <div style={{ display: 'flex', gap: 0 }}>
+                {(['npm', 'cli'] as const).map((t) => (
+                    <button
+                        key={t}
+                        onClick={() => setTab(t)}
+                        style={{
+                            padding: '6px 16px',
+                            fontSize: 12,
+                            fontWeight: 500,
+                            letterSpacing: '0.3px',
+                            textTransform: 'uppercase',
+                            border: '1px solid var(--md-sys-color-outline-variant)',
+                            borderBottom: tab === t ? 'none' : '1px solid var(--md-sys-color-outline-variant)',
+                            borderRadius: t === 'npm' ? '8px 0 0 0' : '0 8px 0 0',
+                            background: tab === t
+                                ? 'var(--md-sys-color-surface-container-highest)'
+                                : 'var(--md-sys-color-surface-container)',
+                            color: tab === t
+                                ? 'var(--md-sys-color-on-surface)'
+                                : 'var(--md-sys-color-on-surface-variant)',
+                            cursor: 'pointer',
+                            fontFamily: 'inherit',
+                            transition: 'background 150ms, color 150ms',
+                        }}
+                    >
+                        {t}
+                    </button>
+                ))}
+                <div style={{ flex: 1, borderBottom: '1px solid var(--md-sys-color-outline-variant)' }} />
+            </div>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                background: 'var(--md-sys-color-surface-container-highest)',
+                borderRadius: '0 0 8px 8px',
+                padding: '12px 16px',
+                fontFamily: "'Google Sans Mono', monospace",
+                fontSize: 14,
+                color: 'var(--md-sys-color-on-surface)',
+                border: '1px solid var(--md-sys-color-outline-variant)',
+                borderTop: 'none',
+            }}>
+                <span style={{ color: 'var(--md-sys-color-primary)', userSelect: 'none' }}>$</span>
+                <span style={{ flex: 1 }}>{cmd}</span>
+                <button
+                    onClick={handleCopy}
+                    title="Copy"
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        color: copied ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-on-surface-variant)',
+                        cursor: 'pointer',
+                        padding: 4,
+                        borderRadius: 4,
+                        display: 'flex',
+                        alignItems: 'center',
+                        transition: 'color 150ms',
+                    }}
+                >
+                    {copied ? '✓' : '⧉'}
+                </button>
+            </div>
+        </div>
+    );
+}
+

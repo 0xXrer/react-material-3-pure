@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@m3/components/Button';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function ButtonPage() {
     return (
@@ -13,7 +13,7 @@ export function ButtonPage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add button" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add button" />
 
             <div className="section">
                 <h2 className="section-title">Variants</h2>
@@ -24,7 +24,7 @@ export function ButtonPage() {
                     <Button variant="elevated">Elevated</Button>
                     <Button variant="tonal">Tonal</Button>
                 </div>
-                <CodeBlock code={`import { Button } from '@/components/ui/Button';
+                <CodeBlock code={`import { Button } from 'react-material-3-pure'
 
 <Button variant="filled">Filled</Button>
 <Button variant="outlined">Outlined</Button>

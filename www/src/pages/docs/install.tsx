@@ -1,4 +1,4 @@
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function InstallPage() {
     return (
@@ -11,8 +11,8 @@ export function InstallPage() {
             </div>
 
             <div className="section">
-                <h2 className="section-title">NPM Package</h2>
-                <InstallCmd cmd="npm install react-material-3-pure" />
+                <h2 className="section-title">Install</h2>
+                <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure init" />
                 <CodeBlock code={`import { Button, Switch } from 'react-material-3-pure'
 import 'react-material-3-pure/styles'
 
@@ -24,15 +24,6 @@ function App() {
     </ThemeProvider>
   )
 }`} />
-            </div>
-
-            <div className="section">
-                <h2 className="section-title">CLI (copy-paste)</h2>
-                <p className="page-description" style={{ marginBottom: 16 }}>
-                    Alternatively, use the CLI to copy individual components into your project:
-                </p>
-                <InstallCmd cmd="npx m3-pure init" />
-                <InstallCmd cmd="npx m3-pure add button" />
             </div>
 
             <div className="section">

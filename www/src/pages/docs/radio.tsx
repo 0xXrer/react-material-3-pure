@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Radio } from '@m3/components/Radio';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function RadioPage() {
     const [value, setValue] = useState('a');
@@ -14,7 +14,7 @@ export function RadioPage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add radio" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add radio" />
 
             <div className="section">
                 <h2 className="section-title">Radio Group</h2>
@@ -38,7 +38,7 @@ export function RadioPage() {
                         </label>
                     ))}
                 </div>
-                <CodeBlock code={`import { Radio } from '@/components/ui/Radio';
+                <CodeBlock code={`import { Radio } from 'react-material-3-pure'
 
 const [value, setValue] = useState('a');
 

@@ -4,6 +4,26 @@ const RELEASES: Release[] = [
         date: '2026-02-22',
         sections: [
             {
+                type: 'fixed',
+                items: [
+                    'Static ESM named imports broken by tsup code splitting — disabled splitting',
+                ],
+            },
+            {
+                type: 'added',
+                items: [
+                    'Docs site: Installation page, Changelog page',
+                    'InstallBlock component with NPM/CLI tabs',
+                    'Updated all component doc pages with npm package imports',
+                ],
+            },
+        ],
+    },
+    {
+        version: '0.1.0',
+        date: '2026-02-22',
+        sections: [
+            {
                 type: 'added',
                 items: [
                     'Publishable NPM package (packages/lib/) — ESM + CJS + TypeScript declarations',

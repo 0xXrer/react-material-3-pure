@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Checkbox } from '@m3/components/Checkbox';
-import { CodeBlock, InstallCmd } from '@/components/code-block';
+import { CodeBlock, InstallBlock } from '@/components/code-block';
 
 export function CheckboxPage() {
     const [checked1, setChecked1] = useState(false);
@@ -17,7 +17,7 @@ export function CheckboxPage() {
                 </p>
             </div>
 
-            <InstallCmd cmd="npx m3-pure add checkbox" />
+            <InstallBlock npm="npm install react-material-3-pure" cli="npx m3-pure add checkbox" />
 
             <div className="section">
                 <h2 className="section-title">States</h2>
@@ -45,7 +45,7 @@ export function CheckboxPage() {
                         Indeterminate
                     </label>
                 </div>
-                <CodeBlock code={`import { Checkbox } from '@/components/ui/Checkbox';
+                <CodeBlock code={`import { Checkbox } from 'react-material-3-pure'
 
 const [checked, setChecked] = useState(false);
 
