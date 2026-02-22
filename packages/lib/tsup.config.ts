@@ -1,21 +1,28 @@
 import { defineConfig } from 'tsup';
-import cssModulesPlugin from 'esbuild-plugin-css-modules';
+import CssModulesPlugin from 'esbuild-css-modules-plugin';
 
-export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-    styles: 'src/styles.ts',
+export default defineConfig([
+  {
+    entry: {
+      index: 'src/index.ts',
+    },
+    format: ['esm', 'cjs'],
+    dts: true,
+    splitting: true,
+    treeshake: true,
+    clean: true,
+    external: ['react', 'react-dom', 'react/jsx-runtime'],
+    esbuildPlugins: [
+      CssModulesPlugin({
+        inject: false,
+        localsConvention: 'camelCase',
+      }),
+    ],
   },
-  format: ['esm', 'cjs'],
-  dts: true,
-  splitting: true,
-  treeshake: true,
-  clean: true,
-  external: ['react', 'react-dom', 'react/jsx-runtime'],
-  esbuildPlugins: [
-    cssModulesPlugin({
-      inject: false,
-      localsConvention: 'camelCase',
-    }),
-  ],
-});
+  {
+    entry: {
+      styles: 'src/styles.css',
+    },
+    outDir: 'dist',
+  },
+]);
