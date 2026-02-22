@@ -4,6 +4,7 @@ export * from './components/Chip';
 export * from './components/Dialog';
 export * from './components/Divider';
 export * from './components/Radio';
+export * from './components/Switch';
 export * from './components/TextField';
 export * from './components/ThemeProvider';
 
