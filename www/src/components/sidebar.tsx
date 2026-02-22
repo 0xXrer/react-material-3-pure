@@ -6,6 +6,8 @@ const NAV_ITEMS = [
         label: 'Getting Started',
         items: [
             { to: '/', label: 'Introduction' },
+            { to: '/docs/install', label: 'Installation' },
+            { to: '/docs/changelog', label: 'Changelog' },
         ],
     },
     {

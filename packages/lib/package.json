@@ -1,18 +1,18 @@
 {
     "name": "react-material-3-pure",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "types": "./dist/packages/lib/src/index.d.ts",
     "exports": {
         ".": {
             "import": {
-                "types": "./dist/index.d.ts",
+                "types": "./dist/packages/lib/src/index.d.ts",
                 "default": "./dist/index.js"
             },
             "require": {
-                "types": "./dist/index.d.cts",
+                "types": "./dist/packages/lib/src/index.d.ts",
                 "default": "./dist/index.cjs"
             }
         },
@@ -34,7 +34,7 @@
         "typescript": "~5.9.3"
     },
     "scripts": {
-        "build": "tsup",
+        "build": "tsup && tsc --emitDeclarationOnly",
         "clean": "rimraf dist"
     }
 }

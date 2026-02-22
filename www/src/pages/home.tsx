@@ -28,7 +28,7 @@ export function Home() {
                     letterSpacing: '0.3px',
                     marginBottom: 16,
                 }}>
-                    v0.2.0
+                    v0.1.0
                 </div>
 
                 <h1 style={{

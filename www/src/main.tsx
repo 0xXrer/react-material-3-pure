@@ -13,6 +13,8 @@ import { RadioPage } from './pages/docs/radio';
 import { SwitchPage } from './pages/docs/switch';
 import { TextFieldPage } from './pages/docs/textfield';
 import { ThemePage } from './pages/docs/theme';
+import { InstallPage } from './pages/docs/install';
+import { ChangelogPage } from './pages/docs/changelog';
 import './app.css';
 
 createRoot(document.getElementById('root')!).render(
@@ -31,6 +33,8 @@ createRoot(document.getElementById('root')!).render(
                         <Route path="/docs/switch" element={<SwitchPage />} />
                         <Route path="/docs/textfield" element={<TextFieldPage />} />
                         <Route path="/docs/theme" element={<ThemePage />} />
+                        <Route path="/docs/install" element={<InstallPage />} />
+                        <Route path="/docs/changelog" element={<ChangelogPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
