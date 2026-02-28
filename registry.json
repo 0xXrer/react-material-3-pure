@@ -232,6 +232,239 @@
       ],
       "hooks": [],
       "styles": []
+    },
+    "select": {
+      "name": "Select",
+      "description": "M3 Select — filled and outlined with dropdown menu, keyboard nav",
+      "files": [
+        {
+          "path": "components/Select/Select.tsx",
+          "target": "Select/Select.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Select/Select.module.css",
+          "target": "Select/Select.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Select/index.ts",
+          "target": "Select/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [],
+      "styles": [
+        "theme"
+      ]
+    },
+    "slider": {
+      "name": "Slider",
+      "description": "M3 Slider — single and range, labeled, tick marks",
+      "files": [
+        {
+          "path": "components/Slider/Slider.tsx",
+          "target": "Slider/Slider.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Slider/Slider.module.css",
+          "target": "Slider/Slider.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Slider/index.ts",
+          "target": "Slider/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [],
+      "styles": [
+        "theme"
+      ]
+    },
+    "tabs": {
+      "name": "Tabs",
+      "description": "M3 Tabs — primary and secondary variants with indicator animation",
+      "files": [
+        {
+          "path": "components/Tabs/Tabs.tsx",
+          "target": "Tabs/Tabs.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Tabs/Tabs.module.css",
+          "target": "Tabs/Tabs.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Tabs/index.ts",
+          "target": "Tabs/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "menu": {
+      "name": "Menu",
+      "description": "M3 Menu — dropdown with items, dividers, keyboard nav, ripple",
+      "files": [
+        {
+          "path": "components/Menu/Menu.tsx",
+          "target": "Menu/Menu.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Menu/Menu.module.css",
+          "target": "Menu/Menu.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Menu/index.ts",
+          "target": "Menu/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "list": {
+      "name": "List",
+      "description": "M3 List — items with icons, avatars, supporting text, keyboard nav",
+      "files": [
+        {
+          "path": "components/List/List.tsx",
+          "target": "List/List.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/List/List.module.css",
+          "target": "List/List.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/List/index.ts",
+          "target": "List/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "progress": {
+      "name": "Progress",
+      "description": "M3 Progress — linear and circular, determinate/indeterminate, four-color",
+      "files": [
+        {
+          "path": "components/Progress/Progress.tsx",
+          "target": "Progress/Progress.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Progress/Progress.module.css",
+          "target": "Progress/Progress.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Progress/index.ts",
+          "target": "Progress/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [],
+      "styles": [
+        "theme"
+      ]
+    },
+    "icon": {
+      "name": "Icon",
+      "description": "M3 Icon — wrapper for Material Symbols or SVG icons",
+      "files": [
+        {
+          "path": "components/Icon/Icon.tsx",
+          "target": "Icon/Icon.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Icon/Icon.module.css",
+          "target": "Icon/Icon.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Icon/index.ts",
+          "target": "Icon/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [],
+      "styles": []
+    },
+    "icon-button": {
+      "name": "IconButton",
+      "description": "M3 IconButton — standard, filled, tonal, outlined with toggle support",
+      "files": [
+        {
+          "path": "components/IconButton/IconButton.tsx",
+          "target": "IconButton/IconButton.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/IconButton/IconButton.module.css",
+          "target": "IconButton/IconButton.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/IconButton/index.ts",
+          "target": "IconButton/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "fab": {
+      "name": "FAB",
+      "description": "M3 FAB — primary/secondary/tertiary/surface, small/medium/large, extended",
+      "files": [
+        {
+          "path": "components/Fab/Fab.tsx",
+          "target": "Fab/Fab.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Fab/Fab.module.css",
+          "target": "Fab/Fab.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Fab/index.ts",
+          "target": "Fab/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
     }
   },
   "hooks": {

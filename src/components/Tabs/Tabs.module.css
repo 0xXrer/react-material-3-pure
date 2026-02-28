@@ -1,0 +1,216 @@
+.tabs {
+  display: flex;
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs_primary {
+  border-bottom: 1px solid var(--md-sys-color-surface-variant, #e7e0ec);
+}
+
+.tabs_secondary {
+  border-bottom: 1px solid var(--md-sys-color-surface-variant, #e7e0ec);
+}
+
+/* ==========================================================================
+   TAB
+   ========================================================================== */
+
+.tab {
+  position: relative;
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 90px;
+  padding: 0 16px;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--md-sys-typescale-title-small-font, Roboto, sans-serif);
+  font-size: var(--md-sys-typescale-title-small-size, 14px);
+  font-weight: var(--md-sys-typescale-title-small-weight, 500);
+  line-height: var(--md-sys-typescale-title-small-line-height, 20px);
+  letter-spacing: var(--md-sys-typescale-title-small-tracking, 0.1px);
+  transition: color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.primary.tab {
+  height: 48px;
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+}
+
+.primary.tab.active {
+  color: var(--md-sys-color-primary, #6750a4);
+}
+
+.secondary.tab {
+  height: 48px;
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+}
+
+.secondary.tab.active {
+  color: var(--md-sys-color-on-surface, #1d1b20);
+}
+
+.tabDisabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+/* Has icon AND label — taller */
+.primary.tab:has(.tabIcon):has(.tabLabel) {
+  height: 64px;
+}
+
+/* ==========================================================================
+   TAB CONTENT
+   ========================================================================== */
+
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.secondary .tabContent {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.tabIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.tabIcon > svg,
+.tabIcon > [data-icon] {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.tabLabel {
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   STATE LAYER
+   ========================================================================== */
+
+.tabStateLayer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 200ms cubic-bezier(0.2, 0, 0, 1);
+  pointer-events: none;
+}
+
+.primary .tabStateLayer {
+  background-color: var(--md-sys-color-primary, #6750a4);
+}
+
+.secondary .tabStateLayer {
+  background-color: var(--md-sys-color-on-surface, #1d1b20);
+}
+
+.tab:hover .tabStateLayer {
+  opacity: 0.08;
+}
+
+.tab:focus-visible .tabStateLayer {
+  opacity: 0.12;
+}
+
+.pressed .tabStateLayer,
+.tab:active .tabStateLayer {
+  opacity: 0.12;
+}
+
+/* ==========================================================================
+   RIPPLE
+   ========================================================================== */
+
+.ripple {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle, white 100%, black 100%);
+  mask-image: radial-gradient(circle, white 100%, black 100%);
+}
+
+/* ==========================================================================
+   INDICATOR
+   ========================================================================== */
+
+.indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background-color: var(--md-sys-color-primary, #6750a4);
+  animation: indicatorAppear 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.secondary .indicator {
+  height: 2px;
+  border-radius: 0;
+}
+
+@keyframes indicatorAppear {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ==========================================================================
+   TAB PANEL
+   ========================================================================== */
+
+.tabPanel {
+  outline: none;
+  padding: 16px 0;
+}
+
+.tabPanel:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary, #6750a4);
+  outline-offset: -2px;
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px);
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .tabStateLayer,
+  .indicator {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}

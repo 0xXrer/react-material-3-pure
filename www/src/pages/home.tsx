@@ -8,8 +8,17 @@ const COMPONENTS = [
     { to: '/docs/chip', name: 'Chip', desc: 'Assist, filter, input, suggestion variants' },
     { to: '/docs/dialog', name: 'Dialog', desc: 'Modal with focus trap and animations' },
     { to: '/docs/divider', name: 'Divider', desc: 'Full-width and inset variants' },
+    { to: '/docs/fab', name: 'Fab', desc: 'Surface, primary, secondary, tertiary FABs' },
+    { to: '/docs/icon', name: 'Icon', desc: 'Material Symbols with size, fill, grade' },
+    { to: '/docs/icon-button', name: 'IconButton', desc: 'Standard, filled, tonal, outlined + toggle' },
+    { to: '/docs/list', name: 'List', desc: 'One-line, two-line, three-line with icons' },
+    { to: '/docs/menu', name: 'Menu', desc: 'Anchored popup with items and dividers' },
+    { to: '/docs/progress', name: 'Progress', desc: 'Linear and circular, determinate & indeterminate' },
     { to: '/docs/radio', name: 'Radio', desc: 'Single selection with ripple effect' },
+    { to: '/docs/select', name: 'Select', desc: 'Filled and outlined dropdown select' },
+    { to: '/docs/slider', name: 'Slider', desc: 'Single and range with labels and ticks' },
     { to: '/docs/switch', name: 'Switch', desc: 'Toggle with handle and optional icons' },
+    { to: '/docs/tabs', name: 'Tabs', desc: 'Primary and secondary with animated indicator' },
     { to: '/docs/textfield', name: 'TextField', desc: 'Filled and outlined with floating label' },
     { to: '/docs/theme', name: 'ThemeProvider', desc: 'Light/dark/system mode management' },
 ];
@@ -29,7 +38,7 @@ export function Home() {
                     letterSpacing: '0.3px',
                     marginBottom: 16,
                 }}>
-                    v0.3.1
+                    v0.4.0
                 </div>
 
                 <h1 style={{

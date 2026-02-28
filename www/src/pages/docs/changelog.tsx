@@ -1,5 +1,35 @@
 const RELEASES: Release[] = [
     {
+        version: '0.4.0',
+        date: '2026-02-28',
+        sections: [
+            {
+                type: 'added',
+                items: [
+                    'Select — filled and outlined with dropdown, keyboard navigation, error state',
+                    'Slider — single and range with labels, tick marks, step support',
+                    'Tabs — primary and secondary with animated indicator, icons support',
+                    'Menu — anchored popup with items, dividers, leading icons, trailing text',
+                    'List — one-line, two-line, three-line with leading/trailing content',
+                    'Progress — linear and circular, determinate and indeterminate, four-color',
+                    'Icon — Material Symbols wrapper with size, fill, weight, grade',
+                    'IconButton — standard, filled, tonal, outlined with toggle support',
+                    'Fab — surface, primary, secondary, tertiary, extended, sizes (S/M/L)',
+                    'Docs pages for all 9 new components',
+                    'Updated sidebar navigation and home page component grid',
+                    'CLI registry entries for all new components',
+                ],
+            },
+            {
+                type: 'changed',
+                items: [
+                    'Home page version badge updated to v0.4.0',
+                    'Package exports updated with all new components',
+                ],
+            },
+        ],
+    },
+    {
         version: '0.1.1',
         date: '2026-02-22',
         sections: [

@@ -3,8 +3,17 @@ export * from '../../../src/components/Checkbox';
 export * from '../../../src/components/Chip';
 export * from '../../../src/components/Dialog';
 export * from '../../../src/components/Divider';
+export * from '../../../src/components/Fab';
+export * from '../../../src/components/Icon';
+export * from '../../../src/components/IconButton';
+export * from '../../../src/components/List';
+export * from '../../../src/components/Menu';
+export * from '../../../src/components/Progress';
 export * from '../../../src/components/Radio';
+export * from '../../../src/components/Select';
+export * from '../../../src/components/Slider';
 export * from '../../../src/components/Switch';
+export * from '../../../src/components/Tabs';
 export * from '../../../src/components/TextField';
 export * from '../../../src/components/ThemeProvider';
 

@@ -1,0 +1,479 @@
+.select {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 210px;
+  font-family: var(--md-sys-typescale-body-large-font, Roboto, sans-serif);
+}
+
+/* ==========================================================================
+   FIELD (trigger)
+   ========================================================================== */
+
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  min-height: 56px;
+  padding: 0 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.disabled .field {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   FILLED VARIANT
+   ========================================================================== */
+
+.background {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px) var(--md-sys-shape-corner-extra-small, 4px) 0 0;
+  background-color: var(--md-sys-color-surface-container-highest, #e6e0e9);
+  z-index: 0;
+}
+
+.stateLayer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background-color: var(--md-sys-color-on-surface, #1d1b20);
+  transition: opacity 200ms cubic-bezier(0.2, 0, 0, 1);
+  z-index: 1;
+}
+
+.filled .field:hover .stateLayer {
+  opacity: 0.08;
+}
+
+.filled.focused .stateLayer,
+.filled.open .stateLayer {
+  opacity: 0;
+}
+
+.activeIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--md-sys-color-on-surface-variant, #49454f);
+  z-index: 2;
+  transition: height 200ms cubic-bezier(0.2, 0, 0, 1), background-color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.filled.focused .activeIndicator,
+.filled.open .activeIndicator {
+  height: 2px;
+  background-color: var(--md-sys-color-primary, #6750a4);
+}
+
+.filled.error .activeIndicator {
+  background-color: var(--md-sys-color-error, #b3261e);
+}
+
+.filled.error.focused .activeIndicator,
+.filled.error.open .activeIndicator {
+  height: 2px;
+  background-color: var(--md-sys-color-error, #b3261e);
+}
+
+/* ==========================================================================
+   OUTLINED VARIANT
+   ========================================================================== */
+
+.outline {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.outlineStart {
+  border: 1px solid var(--md-sys-color-outline, #79747e);
+  border-right: none;
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px) 0 0 var(--md-sys-shape-corner-extra-small, 4px);
+  width: 12px;
+  transition: border-color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.outlineNotch {
+  border: 1px solid var(--md-sys-color-outline, #79747e);
+  border-right: none;
+  border-left: none;
+  position: relative;
+  padding: 0 4px;
+  transition: border-color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.outlineEnd {
+  border: 1px solid var(--md-sys-color-outline, #79747e);
+  border-left: none;
+  border-radius: 0 var(--md-sys-shape-corner-extra-small, 4px) var(--md-sys-shape-corner-extra-small, 4px) 0;
+  flex: 1;
+  transition: border-color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.outlineLabel {
+  font-size: var(--md-sys-typescale-body-small-size, 12px);
+  line-height: var(--md-sys-typescale-body-small-line-height, 16px);
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+  visibility: hidden;
+  white-space: nowrap;
+  max-width: 0;
+  transition: max-width 100ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.outlined.populated .outlineLabel,
+.outlined.focused .outlineLabel,
+.outlined.open .outlineLabel {
+  max-width: 999px;
+  visibility: visible;
+}
+
+.outlined.populated .outlineNotch,
+.outlined.focused .outlineNotch,
+.outlined.open .outlineNotch {
+  border-top-color: transparent;
+}
+
+.outlined.focused .outlineStart,
+.outlined.focused .outlineNotch,
+.outlined.focused .outlineEnd,
+.outlined.open .outlineStart,
+.outlined.open .outlineNotch,
+.outlined.open .outlineEnd {
+  border-color: var(--md-sys-color-primary, #6750a4);
+  border-width: 2px;
+}
+
+.outlined.focused .outlineNotch,
+.outlined.open .outlineNotch {
+  border-top-color: transparent;
+}
+
+.outlined.focused .outlineLabel,
+.outlined.open .outlineLabel {
+  color: var(--md-sys-color-primary, #6750a4);
+}
+
+.outlined.error .outlineStart,
+.outlined.error .outlineNotch,
+.outlined.error .outlineEnd {
+  border-color: var(--md-sys-color-error, #b3261e);
+}
+
+.outlined.error.focused .outlineLabel,
+.outlined.error.open .outlineLabel {
+  color: var(--md-sys-color-error, #b3261e);
+}
+
+/* ==========================================================================
+   LABEL (filled)
+   ========================================================================== */
+
+.label {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  font-size: var(--md-sys-typescale-body-large-size, 16px);
+  line-height: var(--md-sys-typescale-body-large-line-height, 24px);
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+  pointer-events: none;
+  z-index: 2;
+  transition:
+    top 200ms cubic-bezier(0.2, 0, 0, 1),
+    transform 200ms cubic-bezier(0.2, 0, 0, 1),
+    font-size 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.withLeadingIcon .label {
+  left: 52px;
+}
+
+.filled.populated .label,
+.filled.focused .label,
+.filled.open .label {
+  top: 8px;
+  transform: translateY(0);
+  font-size: var(--md-sys-typescale-body-small-size, 12px);
+  line-height: var(--md-sys-typescale-body-small-line-height, 16px);
+}
+
+.filled.focused .label,
+.filled.open .label {
+  color: var(--md-sys-color-primary, #6750a4);
+}
+
+.filled.error .label {
+  color: var(--md-sys-color-error, #b3261e);
+}
+
+/* ==========================================================================
+   FIELD CONTENT
+   ========================================================================== */
+
+.fieldContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  z-index: 2;
+  position: relative;
+}
+
+.filled .fieldContent {
+  padding-top: 22px;
+  padding-bottom: 6px;
+}
+
+.valueText {
+  font-size: var(--md-sys-typescale-body-large-size, 16px);
+  line-height: var(--md-sys-typescale-body-large-line-height, 24px);
+  color: var(--md-sys-color-on-surface, #1d1b20);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.placeholder {
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+}
+
+/* ==========================================================================
+   ICONS
+   ========================================================================== */
+
+.leadingIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 16px;
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.leadingIcon > svg,
+.leadingIcon > [data-icon] {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.trailingIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 16px;
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.arrow {
+  width: 24px;
+  height: 24px;
+  transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.open .arrow {
+  transform: rotate(180deg);
+}
+
+/* ==========================================================================
+   MENU
+   ========================================================================== */
+
+.menuWrapper {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding-top: 4px;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  background-color: var(--md-sys-color-surface-container, #f3edf7);
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px);
+  box-shadow: var(--md-sys-elevation-level-2,
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3),
+    0px 2px 6px 2px rgba(0, 0, 0, 0.15));
+  max-height: 256px;
+  overflow-y: auto;
+  outline: none;
+}
+
+/* ==========================================================================
+   OPTION
+   ========================================================================== */
+
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 8px 16px;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.optionStateLayer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background-color: var(--md-sys-color-on-surface, #1d1b20);
+  transition: opacity 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.option:hover .optionStateLayer {
+  opacity: 0.08;
+}
+
+.option:focus-visible .optionStateLayer {
+  opacity: 0.12;
+}
+
+.optionContent {
+  flex: 1;
+  font-size: var(--md-sys-typescale-body-large-size, 16px);
+  line-height: var(--md-sys-typescale-body-large-line-height, 24px);
+  color: var(--md-sys-color-on-surface, #1d1b20);
+  position: relative;
+  z-index: 1;
+}
+
+.optionSelected {
+  background-color: color-mix(in srgb, var(--md-sys-color-secondary-container, #e8def8) 100%, transparent);
+}
+
+.optionSelected .optionContent {
+  color: var(--md-sys-color-on-secondary-container, #1d192b);
+}
+
+.optionDisabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.optionCheck {
+  width: 18px;
+  height: 18px;
+  margin-left: 12px;
+  color: var(--md-sys-color-primary, #6750a4);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   SUPPORTING TEXT
+   ========================================================================== */
+
+.supportingText {
+  padding: 4px 16px 0;
+  font-size: var(--md-sys-typescale-body-small-size, 12px);
+  line-height: var(--md-sys-typescale-body-small-line-height, 16px);
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+}
+
+.supportingTextError {
+  color: var(--md-sys-color-error, #b3261e);
+}
+
+/* ==========================================================================
+   DISABLED STATE
+   ========================================================================== */
+
+.disabled .background {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 4%, transparent);
+}
+
+.disabled .valueText,
+.disabled .label,
+.disabled .leadingIcon,
+.disabled .trailingIcon {
+  opacity: 0.38;
+}
+
+.disabled .activeIndicator {
+  opacity: 0.38;
+}
+
+.disabled .outlineStart,
+.disabled .outlineNotch,
+.disabled .outlineEnd {
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 12%, transparent);
+}
+
+/* ==========================================================================
+   FOCUS
+   ========================================================================== */
+
+.field:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary, #6750a4);
+  outline-offset: 2px;
+  border-radius: var(--md-sys-shape-corner-extra-small, 4px);
+}
+
+.outlined .field:focus-visible {
+  outline: none;
+}
+
+/* ==========================================================================
+   DARK THEME
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .background {
+    background-color: var(--md-sys-color-surface-container-highest, #36343b);
+  }
+
+  .menu {
+    background-color: var(--md-sys-color-surface-container, #211f26);
+  }
+}
+
+[data-theme="dark"] .background {
+  background-color: var(--md-sys-color-surface-container-highest, #36343b);
+}
+
+[data-theme="dark"] .menu {
+  background-color: var(--md-sys-color-surface-container, #211f26);
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .label,
+  .arrow,
+  .activeIndicator,
+  .stateLayer,
+  .optionStateLayer,
+  .outlineStart,
+  .outlineNotch,
+  .outlineEnd,
+  .outlineLabel {
+    transition-duration: 0ms !important;
+  }
+}
