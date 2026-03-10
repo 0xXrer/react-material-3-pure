@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "m3-pure",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "Material Design 3 components for React",
   "repository": "https://github.com/user/react-material-3-pure",
   "components": {
@@ -456,6 +456,137 @@
         {
           "path": "components/Fab/index.ts",
           "target": "Fab/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "badge": {
+      "name": "Badge",
+      "description": "M3 Badge — small dot or large with value, positioned over content",
+      "files": [
+        {
+          "path": "components/Badge/Badge.tsx",
+          "target": "Badge/Badge.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Badge/Badge.module.css",
+          "target": "Badge/Badge.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Badge/index.ts",
+          "target": "Badge/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [],
+      "styles": [
+        "theme"
+      ]
+    },
+    "card": {
+      "name": "Card",
+      "description": "M3 Card — elevated, filled, outlined variants with optional interaction",
+      "files": [
+        {
+          "path": "components/Card/Card.tsx",
+          "target": "Card/Card.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/Card/Card.module.css",
+          "target": "Card/Card.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/Card/index.ts",
+          "target": "Card/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "navigation-bar": {
+      "name": "NavigationBar",
+      "description": "M3 NavigationBar — bottom navigation with icon + label tabs",
+      "files": [
+        {
+          "path": "components/NavigationBar/NavigationBar.tsx",
+          "target": "NavigationBar/NavigationBar.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/NavigationBar/NavigationBar.module.css",
+          "target": "NavigationBar/NavigationBar.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/NavigationBar/index.ts",
+          "target": "NavigationBar/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [
+        "useRipple"
+      ],
+      "styles": [
+        "theme"
+      ]
+    },
+    "navigation-drawer": {
+      "name": "NavigationDrawer",
+      "description": "M3 NavigationDrawer — standard inline or modal with scrim and animation",
+      "files": [
+        {
+          "path": "components/NavigationDrawer/NavigationDrawer.tsx",
+          "target": "NavigationDrawer/NavigationDrawer.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/NavigationDrawer/NavigationDrawer.module.css",
+          "target": "NavigationDrawer/NavigationDrawer.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/NavigationDrawer/index.ts",
+          "target": "NavigationDrawer/index.ts",
+          "type": "barrel"
+        }
+      ],
+      "hooks": [],
+      "styles": [
+        "theme"
+      ]
+    },
+    "segmented-button": {
+      "name": "SegmentedButton",
+      "description": "M3 SegmentedButton — single or multi-select segmented toggle group",
+      "files": [
+        {
+          "path": "components/SegmentedButton/SegmentedButton.tsx",
+          "target": "SegmentedButton/SegmentedButton.tsx",
+          "type": "component"
+        },
+        {
+          "path": "components/SegmentedButton/SegmentedButton.module.css",
+          "target": "SegmentedButton/SegmentedButton.module.css",
+          "type": "style"
+        },
+        {
+          "path": "components/SegmentedButton/index.ts",
+          "target": "SegmentedButton/index.ts",
           "type": "barrel"
         }
       ],

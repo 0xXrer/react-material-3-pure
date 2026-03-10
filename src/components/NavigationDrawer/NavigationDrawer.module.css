@@ -1,0 +1,183 @@
+.modalContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modalContainer.open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background-color: var(--md-sys-color-scrim, #000000);
+  opacity: 0;
+  transition: opacity 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.modalContainer.open .scrim {
+  opacity: 0.32;
+}
+
+/* ========== DRAWER BASE ========== */
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 360px;
+  max-width: calc(100vw - 56px);
+  height: 100%;
+  background-color: var(--md-sys-color-surface-container-low, #f7f2fa);
+  overflow-y: auto;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+/* ========== STANDARD ========== */
+
+.standard {
+  position: relative;
+  flex-shrink: 0;
+  border-inline-end: 1px solid var(--md-sys-color-outline-variant, #cac4d0);
+  transform: translateX(-100%);
+  transition: transform 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.standard.end {
+  border-inline-end: none;
+  border-inline-start: 1px solid var(--md-sys-color-outline-variant, #cac4d0);
+  transform: translateX(100%);
+}
+
+.standard.open {
+  transform: translateX(0);
+}
+
+/* ========== MODAL ========== */
+
+.modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 1001;
+  border-radius: 0 var(--md-sys-shape-corner-large, 16px) var(--md-sys-shape-corner-large, 16px) 0;
+  box-shadow: var(--md-sys-elevation-3,
+    0 4px 8px 3px rgba(0,0,0,0.15),
+    0 1px 3px rgba(0,0,0,0.3));
+  transform: translateX(-100%);
+  transition: transform 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.modal.start {
+  left: 0;
+}
+
+.modal.end {
+  right: 0;
+  border-radius: var(--md-sys-shape-corner-large, 16px) 0 0 var(--md-sys-shape-corner-large, 16px);
+  transform: translateX(100%);
+}
+
+.modal.open {
+  transform: translateX(0);
+}
+
+/* ========== HEADER ========== */
+
+.header {
+  padding: 16px 28px 0;
+  font-family: var(--md-sys-typescale-title-small-font, Roboto, sans-serif);
+  font-size: var(--md-sys-typescale-title-small-size, 0.875rem);
+  font-weight: var(--md-sys-typescale-title-small-weight, 500);
+  line-height: var(--md-sys-typescale-title-small-line-height, 1.25rem);
+  letter-spacing: var(--md-sys-typescale-title-small-tracking, 0.1px);
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+  margin-bottom: 8px;
+}
+
+/* ========== ITEM ========== */
+
+.item {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 56px;
+  padding: 0 24px 0 16px;
+  border-radius: var(--md-sys-shape-corner-full, 9999px);
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+  font-family: var(--md-sys-typescale-label-large-font, Roboto, sans-serif);
+  font-size: var(--md-sys-typescale-label-large-size, 0.875rem);
+  font-weight: var(--md-sys-typescale-label-large-weight, 500);
+  line-height: var(--md-sys-typescale-label-large-line-height, 1.25rem);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking, 0.1px);
+  transition: background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+              color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.item:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 8%, transparent);
+}
+
+.item:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface, #1d1b20) 12%, transparent);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary, #6750a4);
+  outline-offset: -2px;
+}
+
+.activeItem {
+  background-color: var(--md-sys-color-secondary-container, #e8def8);
+  color: var(--md-sys-color-on-secondary-container, #1d192b);
+}
+
+.activeItem:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary-container, #1d192b) 8%, var(--md-sys-color-secondary-container, #e8def8));
+}
+
+.itemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.itemIcon > svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.itemLabel {
+  flex: 1;
+  text-align: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemBadge {
+  flex-shrink: 0;
+}

@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const ROOT = path.resolve(import.meta.dirname, '..', '..');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, '..', '..');
 const SRC = path.join(ROOT, 'src');
 const REGISTRY_PATH = path.join(ROOT, 'registry.json');
 const OUTPUT = path.join(ROOT, 'cli', 'src', 'generated', 'registry.ts');

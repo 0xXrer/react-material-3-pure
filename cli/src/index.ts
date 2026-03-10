@@ -15,7 +15,7 @@ import {
   type RegistryComponent,
 } from './generated/registry.js';
 
-const VERSION = '0.3.0';
+const VERSION = '0.4.0';
 
 interface M3Config {
   $schema?: string;
@@ -160,13 +160,48 @@ program
         }
       }
 
+      const entryCSS = `/* m3-pure — Material Design 3 tokens & reset */\n@import './theme.css';\n@import './global.css';\n`;
+      await writeFile(cwd, path.join(config.stylesDir, 'm3-pure.css'), entryCSS);
+
+      let patched = false;
+      if (!options.yes) {
+        spinner.stop();
+        const entryFiles = [
+          'src/main.tsx', 'src/main.ts', 'src/main.jsx', 'src/main.js',
+          'src/index.tsx', 'src/index.ts', 'src/index.jsx', 'src/index.js',
+          'src/App.tsx', 'src/App.jsx',
+        ];
+        const found = entryFiles.find((f) => fs.pathExistsSync(path.join(cwd, f)));
+        if (found) {
+          const { patch } = await prompts({
+            type: 'confirm',
+            name: 'patch',
+            message: `Auto-import styles in ${found}?`,
+            initial: true,
+          });
+          if (patch) {
+            const absEntry = path.join(cwd, found);
+            const original = await fs.readFile(absEntry, 'utf-8');
+            const importLine = `import './${path.posix.relative(path.posix.normalize(path.dirname(found)), path.posix.normalize(config.stylesDir))}/m3-pure.css';\n`;
+            if (!original.includes('m3-pure.css')) {
+              await fs.writeFile(absEntry, importLine + original);
+              patched = true;
+            }
+          }
+        }
+        spinner.start();
+      }
+
       spinner.succeed(chalk.green('m3-pure initialized!'));
       console.log('');
-      console.log(chalk.dim('  Next steps:'));
-      console.log(`  ${chalk.cyan('1.')} Import the theme in your app:`);
-      console.log(chalk.dim(`     import '${config.stylesDir}/theme.css'`));
-      console.log(`  ${chalk.cyan('2.')} Add a component:`);
-      console.log(chalk.dim('     npx m3-pure add button'));
+      if (patched) {
+        console.log(`  ${chalk.green('✓')} Theme styles auto-imported`);
+      } else {
+        console.log(`  ${chalk.cyan('!')} Add this import to your app entry:`);
+        console.log(chalk.dim(`     import '${config.stylesDir}/m3-pure.css'`));
+      }
+      console.log('');
+      console.log(chalk.dim('  Next: npx m3-pure add button'));
       console.log('');
     } catch (err) {
       spinner.fail(chalk.red('Init failed'));
@@ -525,6 +560,36 @@ program
           issues++;
         }
       }
+    }
+
+    const m3CssPath = path.join(config.stylesDir, 'm3-pure.css');
+    if (await fileExists(cwd, m3CssPath)) {
+      console.log(`  ${chalk.green('✓')} m3-pure.css entry file present`);
+    } else {
+      console.log(`  ${chalk.yellow('~')} m3-pure.css entry missing — run init again or create ${m3CssPath}`);
+      issues++;
+    }
+
+    const entryFiles = [
+      'src/main.tsx', 'src/main.ts', 'src/main.jsx', 'src/main.js',
+      'src/index.tsx', 'src/index.ts', 'src/index.jsx', 'src/index.js',
+    ];
+    let themeImported = false;
+    for (const ef of entryFiles) {
+      const abs = path.join(cwd, ef);
+      if (await fs.pathExists(abs)) {
+        const content = await fs.readFile(abs, 'utf-8');
+        if (content.includes('m3-pure.css') || content.includes('theme.css')) {
+          themeImported = true;
+        }
+        break;
+      }
+    }
+    if (themeImported) {
+      console.log(`  ${chalk.green('✓')} Theme styles imported in app entry`);
+    } else {
+      console.log(`  ${chalk.red('✗')} Theme styles NOT imported — add: import '${config.stylesDir}/m3-pure.css'`);
+      issues++;
     }
 
     console.log('');
