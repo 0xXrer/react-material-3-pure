@@ -1,19 +1,16 @@
 'use client';
 
-import { forwardRef, createContext, useContext, useCallback } from 'react';
+import { forwardRef, useCallback } from 'react';
 import styles from './SegmentedButton.module.css';
 import { useRipple } from '../../hooks';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { cn, createOptionalContext } from '../../utils';
 
 interface SegmentedCtx {
   selectedSet: Set<number>;
   multiSelect: boolean;
 }
 
-const SegCtx = createContext<SegmentedCtx>({ selectedSet: new Set(), multiSelect: false });
+const [SegProvider, useSegContext] = createOptionalContext<SegmentedCtx>('SegmentedButton', { selectedSet: new Set(), multiSelect: false });
 
 export type SegmentedButtonSetProps = {
   selected?: number | number[];
@@ -45,7 +42,7 @@ export const SegmentedButtonSet = forwardRef<HTMLDivElement, SegmentedButtonSetP
     );
 
     return (
-      <SegCtx.Provider value={{ selectedSet, multiSelect }}>
+      <SegProvider value={{ selectedSet, multiSelect }}>
         <div ref={ref} className={cn(styles.set, className)} role="group" {...props}>
           {Array.isArray(children)
             ? children.map((child, i) => {
@@ -56,7 +53,7 @@ export const SegmentedButtonSet = forwardRef<HTMLDivElement, SegmentedButtonSetP
               })
             : children}
         </div>
-      </SegCtx.Provider>
+      </SegProvider>
     );
   },
 );
@@ -76,7 +73,7 @@ export type SegmentedButtonProps = {
 
 export const SegmentedButton = forwardRef<HTMLButtonElement, SegmentedButtonProps>(
   ({ icon, label, disabled = false, className, _index = 0, _onToggle, onClick, ...props }, ref) => {
-    const { selectedSet } = useContext(SegCtx);
+    const { selectedSet } = useSegContext();
     const isSelected = selectedSet.has(_index);
     const { surfaceRef, handlers, state } = useRipple<HTMLSpanElement>(disabled);
 

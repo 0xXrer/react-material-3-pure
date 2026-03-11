@@ -2,11 +2,8 @@
 
 import { forwardRef, useCallback } from 'react';
 import styles from './List.module.css';
-import { useRipple } from '../../hooks';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { useRipple, useKeyboardNavigation } from '../../hooks';
+import { cn } from '../../utils';
 
 export type ListItemType = 'text' | 'button' | 'link';
 
@@ -17,35 +14,10 @@ export interface ListProps {
 
 export const List = forwardRef<HTMLUListElement, ListProps>(
   ({ className, children }, ref) => {
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      const list = e.currentTarget;
-      const items = Array.from(
-        list.querySelectorAll('[role="listitem"]:not([aria-disabled="true"])')
-      ) as HTMLElement[];
-      if (!items.length) return;
-
-      const current = document.activeElement as HTMLElement;
-      const idx = items.indexOf(current);
-
-      switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          items[(idx + 1) % items.length]?.focus();
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          items[(idx - 1 + items.length) % items.length]?.focus();
-          break;
-        case 'Home':
-          e.preventDefault();
-          items[0]?.focus();
-          break;
-        case 'End':
-          e.preventDefault();
-          items[items.length - 1]?.focus();
-          break;
-      }
-    }, []);
+    const { handleKeyDown } = useKeyboardNavigation({
+      selector: '[role="listitem"]:not([aria-disabled="true"])',
+      orientation: 'vertical',
+    });
 
     return (
       <ul

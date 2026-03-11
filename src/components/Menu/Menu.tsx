@@ -7,21 +7,16 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  createContext,
-  useContext,
 } from 'react';
 import styles from './Menu.module.css';
-import { useRipple } from '../../hooks';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { useRipple, useClickOutside, useKeyboardNavigation } from '../../hooks';
+import { cn, createSafeContext, mergeRefs } from '../../utils';
 
 interface MenuContextValue {
   closeMenu: () => void;
 }
 
-const MenuContext = createContext<MenuContextValue | null>(null);
+const [MenuProvider, useMenuContext] = createSafeContext<MenuContextValue>('Menu');
 
 export type MenuPositioning = 'absolute' | 'fixed' | 'popover';
 export type MenuCorner = 'start-start' | 'start-end' | 'end-start' | 'end-end';
@@ -50,6 +45,9 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
     ref
   ) => {
     const menuRef = useRef<HTMLDivElement>(null);
+    const anchorRef = useRef<HTMLElement | null>(null);
+    anchorRef.current = anchorEl ?? null;
+
     const [position, setPosition] = useState({ top: 0, left: 0 });
 
     useEffect(() => {
@@ -62,66 +60,23 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       }
     }, [open, anchorEl, positioning]);
 
+    const handleClose = useCallback(() => onClose?.(), [onClose]);
+
+    useClickOutside([menuRef, anchorRef], handleClose, open);
+
     useEffect(() => {
       if (!open) return;
-
-      const handleClickOutside = (e: MouseEvent) => {
-        const target = e.target as Node;
-        if (
-          menuRef.current &&
-          !menuRef.current.contains(target) &&
-          anchorEl &&
-          !anchorEl.contains(target)
-        ) {
-          onClose?.();
-        }
-      };
-
       const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          onClose?.();
-        }
+        if (e.key === 'Escape') handleClose();
       };
-
-      document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleEscape);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-        document.removeEventListener('keydown', handleEscape);
-      };
-    }, [open, anchorEl, onClose]);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }, [open, handleClose]);
 
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent) => {
-        const items = menuRef.current?.querySelectorAll(
-          '[role="menuitem"]:not([aria-disabled="true"])'
-        );
-        if (!items?.length) return;
-        const itemArray = Array.from(items) as HTMLElement[];
-        const current = document.activeElement;
-        const idx = itemArray.indexOf(current as HTMLElement);
-
-        switch (e.key) {
-          case 'ArrowDown':
-            e.preventDefault();
-            itemArray[(idx + 1) % itemArray.length]?.focus();
-            break;
-          case 'ArrowUp':
-            e.preventDefault();
-            itemArray[(idx - 1 + itemArray.length) % itemArray.length]?.focus();
-            break;
-          case 'Home':
-            e.preventDefault();
-            itemArray[0]?.focus();
-            break;
-          case 'End':
-            e.preventDefault();
-            itemArray[itemArray.length - 1]?.focus();
-            break;
-        }
-      },
-      []
-    );
+    const { handleKeyDown } = useKeyboardNavigation({
+      selector: '[role="menuitem"]:not([aria-disabled="true"])',
+      orientation: 'vertical',
+    });
 
     useEffect(() => {
       if (!open) return;
@@ -134,20 +89,16 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
     }, [open]);
 
     const contextValue = useMemo(
-      () => ({ closeMenu: () => onClose?.() }),
-      [onClose]
+      () => ({ closeMenu: handleClose }),
+      [handleClose]
     );
 
     if (!open) return null;
 
     return (
-      <MenuContext.Provider value={contextValue}>
+      <MenuProvider value={contextValue}>
         <div
-          ref={(node) => {
-            (menuRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) ref.current = node;
-          }}
+          ref={mergeRefs(ref, menuRef)}
           role="menu"
           className={cn(
             styles.menu,
@@ -162,7 +113,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
         >
           <div className={styles.menuContent}>{children}</div>
         </div>
-      </MenuContext.Provider>
+      </MenuProvider>
     );
   }
 );
@@ -194,7 +145,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
     },
     ref
   ) => {
-    const ctx = useContext(MenuContext);
+    const ctx = useMenuContext();
     const { surfaceRef, handlers, state } = useRipple<HTMLSpanElement>(disabled);
 
     const handleClick = useCallback(
@@ -202,7 +153,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(
         handlers.onClick(e as React.MouseEvent<HTMLElement>);
         if (!disabled) {
           onClick?.(e);
-          ctx?.closeMenu();
+          ctx.closeMenu();
         }
       },
       [disabled, onClick, ctx, handlers]

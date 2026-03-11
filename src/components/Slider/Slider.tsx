@@ -2,10 +2,7 @@
 
 import { forwardRef, useState, useRef, useCallback, useMemo } from 'react';
 import styles from './Slider.module.css';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { cn } from '../../utils';
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);

@@ -9,41 +9,8 @@ import {
   useImperativeHandle,
 } from 'react';
 import styles from './TextField.module.css';
-
-/**
- * Material Design 3 TextField Component
- *
- * A text input field with M3 styling. Supports filled and outlined variants.
- *
- * @example
- * ```tsx
- * // Filled (default)
- * <TextField label="Email" />
- *
- * // Outlined
- * <TextField variant="outlined" label="Password" type="password" />
- *
- * // With icons
- * <TextField
- *   label="Search"
- *   leadingIcon={<SearchIcon />}
- *   trailingIcon={<ClearIcon />}
- * />
- *
- * // With supporting text
- * <TextField
- *   label="Username"
- *   supportingText="Enter your username"
- * />
- *
- * // Error state
- * <TextField
- *   label="Email"
- *   error
- *   errorText="Invalid email address"
- * />
- * ```
- */
+import { useControllableState } from '../../hooks';
+import { cn } from '../../utils';
 
 export type TextFieldVariant = 'filled' | 'outlined';
 export type TextFieldType =
@@ -91,10 +58,6 @@ export interface TextFieldRef {
   inputElement: HTMLInputElement | HTMLTextAreaElement | null;
 }
 
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter((c): c is string => typeof c === 'string').join(' ');
-}
-
 export const TextField = forwardRef<TextFieldRef, TextFieldProps>(
   (
     {
@@ -130,9 +93,11 @@ export const TextField = forwardRef<TextFieldRef, TextFieldProps>(
 
     const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
     const [focused, setFocused] = useState(false);
-    const [internalValue, setInternalValue] = useState(defaultValue || '');
 
-    const currentValue = value !== undefined ? value : internalValue;
+    const [currentValue, setCurrentValue] = useControllableState({
+      value,
+      defaultValue: (defaultValue as string) || '',
+    });
     const hasPlaceholder = Boolean(props.placeholder);
     const populated = Boolean(currentValue) || Boolean(prefixText) || hasPlaceholder;
     const hasLabel = Boolean(label);
@@ -166,12 +131,10 @@ export const TextField = forwardRef<TextFieldRef, TextFieldProps>(
 
     const handleChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (value === undefined) {
-          setInternalValue(e.target.value);
-        }
+        setCurrentValue(e.target.value);
         onChange?.(e as React.ChangeEvent<HTMLInputElement>);
       },
-      [value, onChange]
+      [setCurrentValue, onChange]
     );
 
     const fieldClasses = cn(

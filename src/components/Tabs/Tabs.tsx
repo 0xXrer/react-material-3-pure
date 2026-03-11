@@ -2,21 +2,14 @@
 
 import {
   forwardRef,
-  useState,
   useRef,
   useCallback,
   useEffect,
   useMemo,
-  createContext,
-  useContext,
-
 } from 'react';
 import styles from './Tabs.module.css';
-import { useRipple } from '../../hooks';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { useRipple, useControllableState, useKeyboardNavigation } from '../../hooks';
+import { cn, createSafeContext, mergeRefs } from '../../utils';
 
 export type TabVariant = 'primary' | 'secondary';
 
@@ -27,7 +20,7 @@ interface TabsContextValue {
   registerTab: (index: number, element: HTMLButtonElement | null) => void;
 }
 
-const TabsContext = createContext<TabsContextValue | null>(null);
+const [TabsProvider, useTabsContext] = createSafeContext<TabsContextValue>('Tabs');
 
 export interface TabProps {
   icon?: React.ReactNode;
@@ -39,20 +32,11 @@ export interface TabProps {
 
 export const Tab = forwardRef<HTMLButtonElement, TabProps>(
   ({ icon, label, disabled = false, className, children }, ref) => {
-    const ctx = useContext(TabsContext);
+    const ctx = useTabsContext();
     const indexRef = useRef(-1);
     const internalRef = useRef<HTMLButtonElement | null>(null);
 
     const { surfaceRef, handlers, state } = useRipple<HTMLSpanElement>(disabled);
-
-    const setRef = useCallback(
-      (node: HTMLButtonElement | null) => {
-        internalRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref]
-    );
 
     useEffect(() => {
       const parent = internalRef.current?.parentElement;
@@ -61,21 +45,21 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
       const tabs = Array.from(parent.querySelectorAll('[role="tab"]'));
       const idx = tabs.indexOf(internalRef.current);
       indexRef.current = idx;
-      ctx?.registerTab(idx, internalRef.current);
+      ctx.registerTab(idx, internalRef.current);
 
       return () => {
-        ctx?.registerTab(idx, null);
+        ctx.registerTab(idx, null);
       };
     }, [ctx]);
 
-    const isActive = ctx ? ctx.activeIndex === indexRef.current : false;
-    const variant = ctx?.variant ?? 'primary';
+    const isActive = ctx.activeIndex === indexRef.current;
+    const variant = ctx.variant;
     const displayLabel = label || children;
 
     const handleClick = useCallback(
       (e: React.MouseEvent<HTMLButtonElement>) => {
         handlers.onClick(e as React.MouseEvent<HTMLElement>);
-        if (!disabled && ctx && indexRef.current >= 0) {
+        if (!disabled && indexRef.current >= 0) {
           ctx.onTabClick(indexRef.current);
         }
       },
@@ -84,7 +68,7 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
 
     return (
       <button
-        ref={setRef}
+        ref={mergeRefs(ref, internalRef)}
         role="tab"
         aria-selected={isActive}
         aria-disabled={disabled || undefined}
@@ -140,12 +124,13 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     },
     ref
   ) => {
-    const isControlled = controlledIndex !== undefined;
-    const [internalIndex, setInternalIndex] = useState(defaultActiveIndex);
-    const activeIndex = isControlled ? controlledIndex : internalIndex;
+    const [activeIndex, setActiveIndex] = useControllableState({
+      value: controlledIndex,
+      defaultValue: defaultActiveIndex,
+      onChange,
+    });
 
     const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
-    const containerRef = useRef<HTMLDivElement>(null);
 
     const registerTab = useCallback(
       (index: number, element: HTMLButtonElement | null) => {
@@ -156,57 +141,18 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
 
     const onTabClick = useCallback(
       (index: number) => {
-        if (!isControlled) {
-          setInternalIndex(index);
-        }
-        onChange?.(index);
+        setActiveIndex(index);
       },
-      [isControlled, onChange]
+      [setActiveIndex]
     );
 
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent) => {
-        const tabs = tabsRef.current.filter(Boolean) as HTMLButtonElement[];
-        const count = tabs.length;
-        if (!count) return;
-
-        let newIndex = activeIndex;
-
-        switch (e.key) {
-          case 'ArrowRight':
-            e.preventDefault();
-            newIndex = (activeIndex + 1) % count;
-            break;
-          case 'ArrowLeft':
-            e.preventDefault();
-            newIndex = (activeIndex - 1 + count) % count;
-            break;
-          case 'Home':
-            e.preventDefault();
-            newIndex = 0;
-            break;
-          case 'End':
-            e.preventDefault();
-            newIndex = count - 1;
-            break;
-          default:
-            return;
-        }
-
-        while (tabs[newIndex]?.disabled && newIndex !== activeIndex) {
-          if (e.key === 'ArrowRight' || e.key === 'End') {
-            newIndex = (newIndex + 1) % count;
-          } else {
-            newIndex = (newIndex - 1 + count) % count;
-          }
-        }
-
-        tabs[newIndex]?.focus();
-        if (!isControlled) setInternalIndex(newIndex);
-        onChange?.(newIndex);
+    const { handleKeyDown } = useKeyboardNavigation({
+      selector: '[role="tab"]:not([disabled])',
+      orientation: 'horizontal',
+      onFocusChange: (index) => {
+        setActiveIndex(index);
       },
-      [activeIndex, isControlled, onChange]
-    );
+    });
 
     const contextValue = useMemo(
       () => ({
@@ -219,7 +165,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     );
 
     return (
-      <TabsContext.Provider value={contextValue}>
+      <TabsProvider value={contextValue}>
         <div
           ref={ref}
           role="tablist"
@@ -228,7 +174,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
         >
           {children}
         </div>
-      </TabsContext.Provider>
+      </TabsProvider>
     );
   }
 );

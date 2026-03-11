@@ -1,19 +1,16 @@
 'use client';
 
-import { forwardRef, createContext, useContext, useCallback } from 'react';
+import { forwardRef, useCallback } from 'react';
 import styles from './NavigationBar.module.css';
 import { useRipple } from '../../hooks';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { cn, createOptionalContext } from '../../utils';
 
 interface NavBarContext {
   activeIndex: number;
   hideLabels: boolean;
 }
 
-const NavBarCtx = createContext<NavBarContext>({ activeIndex: 0, hideLabels: false });
+const [NavBarProvider, useNavBarContext] = createOptionalContext<NavBarContext>('NavBar', { activeIndex: 0, hideLabels: false });
 
 export type NavigationBarProps = {
   activeIndex?: number;
@@ -26,7 +23,7 @@ export type NavigationBarProps = {
 export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
   ({ activeIndex = 0, onChange, hideLabels = false, className, children, ...props }, ref) => {
     return (
-      <NavBarCtx.Provider value={{ activeIndex, hideLabels }}>
+      <NavBarProvider value={{ activeIndex, hideLabels }}>
         <nav ref={ref} className={cn(styles.bar, className)} role="navigation" {...props}>
           <div className={styles.content}>
             {Array.isArray(children)
@@ -41,7 +38,7 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
               : children}
           </div>
         </nav>
-      </NavBarCtx.Provider>
+      </NavBarProvider>
     );
   },
 );
@@ -63,7 +60,7 @@ export type NavigationBarItemProps = {
 
 export const NavigationBarItem = forwardRef<HTMLButtonElement, NavigationBarItemProps>(
   ({ icon, activeIcon, label, badge, disabled = false, className, _index = 0, _onChange, onClick, ...props }, ref) => {
-    const { activeIndex, hideLabels } = useContext(NavBarCtx);
+    const { activeIndex, hideLabels } = useNavBarContext();
     const isActive = activeIndex === _index;
     const { surfaceRef, handlers, state } = useRipple<HTMLSpanElement>(disabled);
 

@@ -1,12 +1,9 @@
 'use client';
 
-import { forwardRef, useCallback, useState } from 'react';
+import { forwardRef, useCallback } from 'react';
 import styles from './IconButton.module.css';
-import { useRipple } from '../../hooks';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { useRipple, useControllableState } from '../../hooks';
+import { cn } from '../../utils';
 
 export type IconButtonVariant = 'standard' | 'filled' | 'tonal' | 'outlined';
 
@@ -52,13 +49,12 @@ export const IconButton = forwardRef<
     },
     ref
   ) => {
-    const isSelectedControlled = controlledSelected !== undefined;
-    const [internalSelected, setInternalSelected] = useState(defaultSelected);
-    const selected = toggle
-      ? isSelectedControlled
-        ? controlledSelected
-        : internalSelected
-      : false;
+    const [selectedState, setSelectedState] = useControllableState({
+      value: controlledSelected,
+      defaultValue: defaultSelected,
+      onChange: onSelectedChange,
+    });
+    const selected = toggle ? selectedState : false;
 
     const { surfaceRef, handlers, state } = useRipple<HTMLSpanElement>(disabled);
 
@@ -67,18 +63,14 @@ export const IconButton = forwardRef<
         handlers.onClick(e as React.MouseEvent<HTMLElement>);
 
         if (toggle && !disabled) {
-          const newSelected = !selected;
-          if (!isSelectedControlled) {
-            setInternalSelected(newSelected);
-          }
-          onSelectedChange?.(newSelected);
+          setSelectedState(!selected);
         }
 
         if (onClick) {
           (onClick as React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>)(e);
         }
       },
-      [handlers, toggle, disabled, selected, isSelectedControlled, onSelectedChange, onClick]
+      [handlers, toggle, disabled, selected, setSelectedState, onClick]
     );
 
     const buttonClass = cn(

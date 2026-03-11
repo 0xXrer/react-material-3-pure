@@ -3,35 +3,7 @@
 import { forwardRef, useCallback } from 'react';
 import styles from './Button.module.css';
 import { useRipple } from '../../hooks';
-
-/**
- * Material Design 3 Button Component
- *
- * Simple shadcn-style API - just put content as children.
- * Icons are just regular children, no special props needed.
- *
- * @example
- * ```tsx
- * // Simple button
- * <Button>Click me</Button>
- *
- * // With icon (just add it as child)
- * <Button variant="filled">
- *   <PlusIcon />
- *   Add Item
- * </Button>
- *
- * // Icon only
- * <Button variant="tonal" size="icon" aria-label="Settings">
- *   <SettingsIcon />
- * </Button>
- *
- * // As link
- * <Button variant="text" as="a" href="/about">
- *   Learn More
- * </Button>
- * ```
- */
+import { cn } from '../../utils';
 
 export type ButtonVariant = 'filled' | 'outlined' | 'text' | 'elevated' | 'tonal';
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
@@ -47,21 +19,12 @@ type ButtonAsAnchor = {
 type ButtonAsType = ButtonAsButton | ButtonAsAnchor;
 
 export type ButtonProps = {
-  /** Visual style of the button */
   variant?: ButtonVariant;
-  /** Size of the button */
   size?: ButtonSize;
-  /** Disable the button */
   disabled?: boolean;
-  /** Additional class name */
   className?: string;
-  /** Button content - text, icons, or any React nodes */
   children?: React.ReactNode;
 } & ButtonAsType;
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
 
 /**
  * M3 Button Component

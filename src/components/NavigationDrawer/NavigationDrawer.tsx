@@ -2,10 +2,7 @@
 
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
 import styles from './NavigationDrawer.module.css';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { cn } from '../../utils';
 
 export type NavigationDrawerProps = {
   open?: boolean;

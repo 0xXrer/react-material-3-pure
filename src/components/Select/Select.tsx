@@ -5,16 +5,11 @@ import {
   useState,
   useRef,
   useCallback,
-  useEffect,
   useMemo,
-  createContext,
-  useContext,
 } from 'react';
 import styles from './Select.module.css';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { useControllableState, useClickOutside } from '../../hooks';
+import { cn, createSafeContext } from '../../utils';
 
 export type SelectVariant = 'filled' | 'outlined';
 
@@ -32,15 +27,15 @@ interface SelectContextValue {
   registerOption: (value: string, index: number) => void;
 }
 
-const SelectContext = createContext<SelectContextValue | null>(null);
+const [SelectProvider, useSelectContext] = createSafeContext<SelectContextValue>('Select');
 
 export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
   ({ value, disabled = false, children, className }, ref) => {
-    const ctx = useContext(SelectContext);
-    const isSelected = ctx?.selectedValue === value;
+    const ctx = useSelectContext();
+    const isSelected = ctx.selectedValue === value;
 
     const handleClick = useCallback(() => {
-      if (!disabled && ctx) {
+      if (!disabled) {
         ctx.onSelect(value);
       }
     }, [disabled, ctx, value]);
@@ -119,9 +114,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     },
     ref
   ) => {
-    const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState(defaultValue);
-    const currentValue = isControlled ? controlledValue : internalValue;
+    const [currentValue, setCurrentValue] = useControllableState({
+      value: controlledValue,
+      defaultValue,
+      onChange,
+    });
 
     const [open, setOpen] = useState(false);
     const [focused, setFocused] = useState(false);
@@ -154,14 +151,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     const handleSelect = useCallback(
       (val: string) => {
-        if (!isControlled) {
-          setInternalValue(val);
-        }
-        onChange?.(val);
+        setCurrentValue(val);
         setOpen(false);
         fieldRef.current?.focus();
       },
-      [isControlled, onChange]
+      [setCurrentValue]
     );
 
     const registerOption = useCallback((value: string, index: number) => {
@@ -244,24 +238,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       [currentValue, handleSelect]
     );
 
-    useEffect(() => {
-      if (!open) return;
-
-      const handleClickOutside = (e: MouseEvent) => {
-        const target = e.target as Node;
-        if (
-          fieldRef.current &&
-          !fieldRef.current.contains(target) &&
-          menuRef.current &&
-          !menuRef.current.contains(target)
-        ) {
-          setOpen(false);
-        }
-      };
-
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [open]);
+    const handleCloseOutside = useCallback(() => setOpen(false), []);
+    useClickOutside([fieldRef, menuRef], handleCloseOutside, open);
 
     const contextValue = useMemo(
       () => ({
@@ -288,7 +266,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           populated && styles.populated,
           hasError && styles.error,
           disabled && styles.disabled,
-          leadingIcon && styles.withLeadingIcon,
+          Boolean(leadingIcon) && styles.withLeadingIcon,
           className
         )}
       >
@@ -359,7 +337,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         </div>
 
         {open && (
-          <SelectContext.Provider value={contextValue}>
+          <SelectProvider value={contextValue}>
             <div className={styles.menuWrapper}>
               <ul
                 ref={menuRef}
@@ -370,7 +348,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                 {children}
               </ul>
             </div>
-          </SelectContext.Provider>
+          </SelectProvider>
         )}
 
         {(supportingText || (hasError && errorText)) && (

@@ -2,10 +2,7 @@
 
 import { forwardRef } from 'react';
 import styles from './Icon.module.css';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { cn } from '../../utils';
 
 export type IconSize = 'sm' | 'md' | 'lg';
 

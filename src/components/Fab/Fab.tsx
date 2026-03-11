@@ -3,10 +3,7 @@
 import { forwardRef, useCallback } from 'react';
 import styles from './Fab.module.css';
 import { useRipple } from '../../hooks';
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { cn } from '../../utils';
 
 export type FabVariant = 'primary' | 'secondary' | 'tertiary' | 'surface';
 export type FabSize = 'small' | 'medium' | 'large';

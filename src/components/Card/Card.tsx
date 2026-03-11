@@ -3,6 +3,7 @@
 import { forwardRef, useCallback } from 'react';
 import styles from './Card.module.css';
 import { useRipple } from '../../hooks';
+import { cn } from '../../utils';
 
 export type CardVariant = 'elevated' | 'filled' | 'outlined';
 
@@ -13,10 +14,6 @@ export type CardProps = {
   className?: string;
   children?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ variant = 'filled', interactive = false, disabled = false, className, children, onClick, ...props }, ref) => {

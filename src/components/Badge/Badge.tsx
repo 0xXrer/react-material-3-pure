@@ -2,6 +2,7 @@
 
 import { forwardRef } from 'react';
 import styles from './Badge.module.css';
+import { cn } from '../../utils';
 
 export type BadgeSize = 'small' | 'large';
 
@@ -13,10 +14,6 @@ export type BadgeProps = {
   className?: string;
   children?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
-
-function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(' ');
-}
 
 function formatValue(value: number | string | undefined, max?: number): string {
   if (value === undefined || value === '') return '';
