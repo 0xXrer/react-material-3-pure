@@ -1,9 +1,6 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
-import dts from 'vite-plugin-dts';
-
 // https://vitejs.dev/config/
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,26 +10,7 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [react(), dts({
-    include: ['src']
-  })],
-  build: {
-    lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      formats: ['es', 'cjs'],
-      fileName: format => `index.${format === 'es' ? 'js' : 'cjs'}`
-    },
-    rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
-      output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'react/jsx-runtime': 'jsxRuntime'
-        }
-      }
-    }
-  },
+  plugins: [react()],
   test: {
     projects: [{
       extends: true,

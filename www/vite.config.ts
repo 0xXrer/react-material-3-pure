@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      '@m3': resolve(__dirname, '..', 'src'),
+      '@m3': resolve(__dirname, '..', 'packages', 'lib', 'src'),
     },
     dedupe: ['react', 'react-dom'],
   },
