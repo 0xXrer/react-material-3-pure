@@ -4,10 +4,10 @@ import {
   forwardRef,
   useCallback,
   useEffect,
-  useImperativeHandle,
   useMemo,
   useRef,
   useState,
+  useId,
 } from 'react';
 import styles from './Dialog.module.css';
 
@@ -208,9 +208,8 @@ export const Dialog = forwardRef<DialogRef, DialogProps>(
     },
     ref
   ) => {
-    // Generate unique IDs for accessibility
-    const generatedId = useRef(`dialog-${Math.random().toString(36).slice(2, 9)}`);
-    const dialogId = id || generatedId.current;
+    const generatedId = useId();
+    const dialogId = id || `dialog-${generatedId}`;
     const headlineId = `${dialogId}-headline`;
     const contentId = `${dialogId}-content`;
 
@@ -230,18 +229,6 @@ export const Dialog = forwardRef<DialogRef, DialogProps>(
     const hasIcon = !!icon;
     const hasHeadline = !!headline;
     const hasActions = !!actions;
-
-    // Imperative handle for external control
-    useImperativeHandle(ref, () => ({
-      show: async () => {
-        await showDialog();
-      },
-      close: async (value?: string) => {
-        await closeDialog(value);
-      },
-      dialogElement: dialogRef.current,
-      returnValue: returnValueState,
-    }));
 
     // Animation helpers
     const animateElement = useCallback(

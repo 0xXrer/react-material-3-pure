@@ -13,8 +13,9 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg', 'icon'],
+      options: ['xs', 'sm', 'md', 'lg', 'xl', 'icon'],
     },
+    square: { control: 'boolean' },
     disabled: { control: 'boolean' },
     as: {
       control: 'select',
@@ -76,6 +77,10 @@ export const Tonal: Story = {
    SIZES
    ========================================================================== */
 
+export const ExtraSmall: Story = {
+  args: { size: 'xs', children: 'Extra Small' },
+};
+
 export const Small: Story = {
   args: { size: 'sm', children: 'Small' },
 };
@@ -86,6 +91,10 @@ export const Medium: Story = {
 
 export const Large: Story = {
   args: { size: 'lg', children: 'Large Button' },
+};
+
+export const ExtraLarge: Story = {
+  args: { size: 'xl', children: 'Extra Large' },
 };
 
 /* ==========================================================================
@@ -188,11 +197,26 @@ export const AllWithIcons: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Button size="xs">XS</Button>
+      <Button size="sm">SM</Button>
+      <Button size="md">MD</Button>
+      <Button size="lg">LG</Button>
+      <Button size="xl">XL</Button>
       <Button size="icon" aria-label="Add">
+        <PlusIcon />
+      </Button>
+    </div>
+  ),
+};
+
+export const Square: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Button square>Square</Button>
+      <Button square variant="outlined">Square</Button>
+      <Button square variant="tonal">Square</Button>
+      <Button square size="icon" aria-label="Add">
         <PlusIcon />
       </Button>
     </div>

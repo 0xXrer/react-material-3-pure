@@ -35,14 +35,28 @@ export function ButtonPage() {
 
             <div className="section">
                 <h2 className="section-title">Sizes</h2>
-                <div className="demo-area">
-                    <Button variant="filled" size="sm">Small</Button>
-                    <Button variant="filled" size="md">Medium</Button>
-                    <Button variant="filled" size="lg">Large</Button>
+                <div className="demo-area" style={{ flexWrap: 'wrap' }}>
+                    <Button variant="filled" size="xs">XS</Button>
+                    <Button variant="filled" size="sm">SM</Button>
+                    <Button variant="filled" size="md">MD</Button>
+                    <Button variant="filled" size="lg">LG</Button>
+                    <Button variant="filled" size="xl">XL</Button>
                 </div>
-                <CodeBlock code={`<Button size="sm">Small</Button>
-<Button size="md">Medium</Button>
-<Button size="lg">Large</Button>`} />
+                <CodeBlock code={`<Button size="xs">XS</Button>
+<Button size="sm">SM</Button>
+<Button size="md">MD</Button>
+<Button size="lg">LG</Button>
+<Button size="xl">XL</Button>`} />
+            </div>
+
+            <div className="section">
+                <h2 className="section-title">Square</h2>
+                <div className="demo-area" style={{ flexWrap: 'wrap' }}>
+                    <Button variant="filled" square>Square</Button>
+                    <Button variant="outlined" square>Square</Button>
+                    <Button variant="tonal" square>Square</Button>
+                </div>
+                <CodeBlock code={`<Button square>Square</Button>`} />
             </div>
 
             <div className="section">

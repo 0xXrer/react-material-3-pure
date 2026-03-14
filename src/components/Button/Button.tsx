@@ -6,7 +6,7 @@ import { useRipple } from '../../hooks';
 import { cn } from '../../utils';
 
 export type ButtonVariant = 'filled' | 'outlined' | 'text' | 'elevated' | 'tonal';
-export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'icon';
 
 type ButtonAsButton = {
   as?: 'button';
@@ -21,6 +21,7 @@ type ButtonAsType = ButtonAsButton | ButtonAsAnchor;
 export type ButtonProps = {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  square?: boolean;
   disabled?: boolean;
   className?: string;
   children?: React.ReactNode;
@@ -39,6 +40,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       size = 'md',
       as = 'button',
       disabled = false,
+      square = false,
       className,
       children,
       onClick,
@@ -63,6 +65,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       styles.button,
       styles[variant],
       styles[size],
+      square && styles.square,
       disabled && styles.disabled,
       state.pressed && styles.pressed,
       className

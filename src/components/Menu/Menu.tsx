@@ -46,7 +46,10 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
   ) => {
     const menuRef = useRef<HTMLDivElement>(null);
     const anchorRef = useRef<HTMLElement | null>(null);
-    anchorRef.current = anchorEl ?? null;
+
+    useEffect(() => {
+      anchorRef.current = anchorEl ?? null;
+    }, [anchorEl]);
 
     const [position, setPosition] = useState({ top: 0, left: 0 });
 

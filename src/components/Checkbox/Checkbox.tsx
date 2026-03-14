@@ -211,11 +211,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const isIndeterminate = indeterminate;
     const isSelected = isChecked || isIndeterminate;
 
-    // Use refs for previous state (before current change)
-    // These values are from BEFORE the current props changed
-    const prevChecked = prevCheckedRef.current;
-    const prevIndeterminate = prevIndeterminateRef.current;
-    const prevDisabled = prevDisabledRef.current;
+    const prevChecked = prevStates.checked;
+    const prevIndeterminate = prevStates.indeterminate;
+    const prevDisabled = prevStates.disabled;
 
     // Determine previous selection states for animation
     const prevNone = !prevChecked && !prevIndeterminate;
@@ -254,7 +252,6 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       prevWasChecked,
       prevWasIndeterminate,
       prevDisabled,
-      prevStates, // Re-compute when prevStates updates after animation
     ]);
 
     // Ripple surface classes

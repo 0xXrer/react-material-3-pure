@@ -521,7 +521,7 @@ export const InputChip = forwardRef<HTMLButtonElement | HTMLAnchorElement, Input
     );
 
     return (
-      <div ref={elementRef as any} className={containerClasses}>
+      <div ref={elementRef as React.Ref<HTMLDivElement>} className={containerClasses}>
         <span className={styles.outline} aria-hidden="true" />
         <span className={styles.focusRing} aria-hidden="true" />
         <span ref={surfaceRef} className={rippleClasses} aria-hidden="true" />

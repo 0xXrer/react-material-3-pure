@@ -2,8 +2,8 @@
 
 # react-material-3-pure
 
-Pure React implementation of Material Design 3 components.\
-No web-component wrappers. CSS Modules + design tokens. Tree-shakeable.
+Pure React implementation of Material Design 3 components (WIP / partial coverage).\
+No web-component wrappers. CSS Modules + design tokens. Tree-shakeable. No external runtime UI deps beyond React.
 
 [![npm](https://img.shields.io/npm/v/react-material-3-pure)](https://www.npmjs.com/package/react-material-3-pure)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -11,6 +11,10 @@ No web-component wrappers. CSS Modules + design tokens. Tree-shakeable.
 https://github.com/user-attachments/assets/be7caf9d-938a-47d0-8ec8-53ea162e618a
 
 </div>
+
+## Status
+
+This is not a full Material (or MUI) implementation. Components are added and refined incrementally.
 
 ## Install
 

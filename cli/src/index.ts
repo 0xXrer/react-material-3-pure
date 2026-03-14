@@ -12,7 +12,6 @@ import {
   HOOKS,
   STYLES,
   REGISTRY_VERSION,
-  type RegistryComponent,
 } from './generated/registry.js';
 
 const VERSION = '0.4.0';

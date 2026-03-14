@@ -12,6 +12,7 @@
     "build": "tsc -b && vite build",
     "build:themes": "tsx scripts/build-themes.ts",
     "lint": "eslint .",
+    "test": "vitest run --config vitest.config.ts",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

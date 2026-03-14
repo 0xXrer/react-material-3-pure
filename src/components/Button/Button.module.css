@@ -51,6 +51,10 @@
   outline-offset: 2px;
 }
 
+.square {
+  border-radius: var(--md-sys-shape-corner-medium, 12px);
+}
+
 /* ==========================================================================
    CONTENT LAYOUT
    ========================================================================== */
@@ -120,6 +124,12 @@
    SIZES
    ========================================================================== */
 
+.xs {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 0.75rem;
+}
+
 .sm {
   height: 32px;
   padding: 0 16px;
@@ -134,6 +144,12 @@
 .lg {
   height: 48px;
   padding: 0 32px;
+  font-size: 1rem;
+}
+
+.xl {
+  height: 56px;
+  padding: 0 40px;
   font-size: 1rem;
 }
 

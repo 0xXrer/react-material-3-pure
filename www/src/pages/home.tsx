@@ -61,7 +61,7 @@ export function Home() {
                 }}>
                     Beautiful, accessible Material Design 3 components for React.
                     <br />
-                    Copy-paste into your project. No runtime dependency.
+                    Copy-paste into your project. React-only runtime deps.
                 </p>
 
                 <div style={{ display: 'flex', gap: 12, marginBottom: 48 }}>

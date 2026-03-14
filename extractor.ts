@@ -1,6 +1,6 @@
 import { globby } from 'globby'
 import { readFile, writeFile, mkdir } from 'fs/promises'
-import { join, relative } from 'path'
+import { join } from 'path'
 
 const BASE = './material-web'
 const OUT = './extracted'
