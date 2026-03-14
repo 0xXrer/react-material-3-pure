@@ -263,15 +263,10 @@
   transition: opacity 150ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-.outlined.focused .outlinePanelActive {
-  opacity: 1;
-}
-
 .outlined .outlineLabel {
   display: flex;
   max-width: 100%;
   transform: translateY(calc(-50% - 0.5px));
-  background: var(--md-sys-color-surface, #232025);
   padding: 0 4px;
   border-radius: 4px;
   z-index: 2;
